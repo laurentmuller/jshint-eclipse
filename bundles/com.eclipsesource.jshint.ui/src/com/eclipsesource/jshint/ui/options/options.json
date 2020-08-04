@@ -1,0 +1,485 @@
+{
+	"enforcing": {
+		"description": "When set to true, these options will make JSHint produce more warnings about your code.",
+		"options": [
+			{
+				"name": "bitwise",
+				"value": true,
+				"description": "This option prohibits the use of bitwise operators such as '^' (XOR), * '|' (OR) and others. Bitwise operators are very rare in JavaScript programs and quite often '&' is simply a mistyped '&&'."
+			},
+			{
+				"name": "freeze",
+				"value": true,
+				"description": "This options prohibits overwriting prototypes of native objects such as 'Array', 'Date' and so on."
+			},
+			{
+				"name": "camelcase",
+				"value": true,
+				"description": "This option allows you to force all variable names to use either camelCase style or UPPER_CASE with underscores.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "curly",
+				"value": true,
+				"description": "This option requires you to always put curly braces around blocks in loops and conditionals."
+			},
+			{
+				"name": "eqeqeq",
+				"value": true,
+				"description": "This options prohibits the use of '==' and '!=' in favor of '===' and '!=='. The former try to coerce values before comparing them which can lead to some unexpected results."
+			},
+			{
+				"name": "futurehostile",
+				"value": true,
+				"description": "This option enables warnings about the use of identifiers which are defined in future versions of JavaScript. Although overwriting them has no effect in contexts where they are not implemented, this practice can cause issues when migrating codebases to newer versions of the language."
+			},
+			{
+				"name": "es3",
+				"value": true,
+				"description": "This option tells JSHint that your code needs to adhere to ECMAScript 3 specification.",
+				"deprecated": "Use 'esversion: 3' instead."
+			},
+			{
+				"name": "es5",
+				"value": true,
+				"description": "This option enables syntax first defined in the ECMAScript 5.1 specification. This includes allowing reserved keywords as object properties.",
+				"deprecated": "Use 'esversion: 5' instead."
+			},
+			{
+				"name": "forin",
+				"value": true,
+				"description": "This option requires all 'for in' loops to filter object's items. The for in statement allows for looping through the names of all of the properties of an object including those inherited through the prototype chain."
+			},
+			{
+				"name": "immed",
+				"value": true,
+				"description": "This option prohibits the use of immediate function invocations without wrapping them in parentheses. Wrapping parentheses assists readers of your code in understanding that the expression is the result of a function, and not the function itself.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "newcap",
+				"value": true,
+				"description": "This option requires you to capitalize names of constructor functions. Capitalizing functions that are intended to be used with 'new' operator is just a convention that helps programmers to visually distinguish constructor functions from other types of functions to help spot mistakes when using 'this'.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "noarg",
+				"value": true,
+				"description": "This option prohibits the use of 'arguments.caller' and 'arguments.callee'.  Both '.caller' and '.callee' make quite a few optimizations impossible so they were deprecated in future versions of JavaScript. In fact, ECMAScript 5 forbids the use of 'arguments.callee' in strict mode."
+			},
+			{
+				"name": "nocomma",
+				"value": true,
+				"description": "This option prohibits the use of the comma operator. When misused, the comma operator can obscure the value of a statement and promote incorrect code."
+			},
+			{
+				"name": "noempty",
+				"value": true,
+				"description": "This option warns when you have an empty block in your code. JSLint was originally warning for all empty blocks and we simply made it optional. There were no studies reporting that empty blocks in JavaScript break your code in any way.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "nonbsp",
+				"value": true,
+				"description": "This option warns about non - breaking whitespace characters. These characters can be entered with option-space on Mac computers and have a potential of breaking non-UTF8 web pages."
+			},
+			{
+				"name": "nonew",
+				"value": true,
+				"description": "This option prohibits the use of constructor functions for side-effects."
+			},
+			{
+				"name": "undef",
+				"value": true,
+				"description": "This option prohibits the use of explicitly undeclared variables."
+			},
+			{
+				"name": "singleGroups",
+				"value": false,
+				"description": "This option prohibits the use of the grouping operator when it is not strictly required. Such usage commonly reflects a misunderstanding of unary operators"
+			},
+			{
+				"name": "varstmt",
+				"value": false,
+				"description": "When set to true, the use of VariableStatements are forbidden."
+			},
+			{
+				"name": "enforceall",
+				"value": false,
+				"description": "This option is a short hand for the most strict JSHint configuration as available in JSHint. It enables all enforcing options and disables all relaxing options that were defined in that release.",
+				"deprecated": "The option cannot be maintained without automatically opting users in to new features."
+			},
+			{
+				"name": "trailingcomma",
+				"value": false,
+				"description": "This option warns when a comma is not placed after the last element in an array or object literal."
+			}
+		]
+	},
+	"relaxing": {
+		"description": "When set to true, these options will make JSHint produce fewer warnings about your code.",
+		"options": [
+			{
+				"name": "asi",
+				"value": true,
+				"description": "This option suppresses warnings about missing semicolons. There is a lot of FUD about semicolon spread by quite a few people in the community. The common myths are that semicolons are required all the time (they are not) and that they are unreliable. JavaScript has rules about semicolons which are followed by *all* browsers so it is up to you to decide whether you should or should not use semicolons in your code."
+			},
+			{
+				"name": "multistr",
+				"value": true,
+				"description": "This option suppresses warnings about multi-line strings.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "debug",
+				"value": true,
+				"description": "This option suppresses warnings about the 'debugger' statements in your code."
+			},
+			{
+				"name": "boss",
+				"value": true,
+				"description": "This option suppresses warnings about the use of assignments in cases where comparisons are expected."
+			},
+			{
+				"name": "evil",
+				"value": true,
+				"description": "This option suppresses warnings about the use of 'eval'. The use of 'eval' is discouraged because it can make your code vulnerable to various injection attacks and it makes it hard for JavaScript interpreter to do certain optimizations."
+			},
+			{
+				"name": "funcscope",
+				"value": true,
+				"description": "This option suppresses warnings about declaring variables inside of control structures while accessing them later from the outside."
+			},
+			{
+				"name": "globalstrict",
+				"value": true,
+				"description": "This option suppresses warnings about the use of global strict mode. Global strict mode can break third-party widgets so it is not recommended."
+			},
+			{
+				"name": "iterator",
+				"value": true,
+				"description": "This option suppresses warnings about the '__iterator__' property. This property is not supported by all browsers so use it carefully."
+			},
+			{
+				"name": "notypeof",
+				"value": true,
+				"description": "This option suppresses warnings about invalid 'typeof' operator values."
+			},
+			{
+				"name": "plusplus",
+				"value": true,
+				"description": "This option prohibits the use of unary increment and decrement operators.  Some people think that '++' and '--' reduces the quality of heir coding styles and there are programming languages—such as Python—that go completely without these operators."
+			},
+			{
+				"name": "proto",
+				"value": true,
+				"description": "This option suppresses warnings about the '__proto__' property."
+			},
+			{
+				"name": "scripturl",
+				"value": true,
+				"description": "This option suppresses warnings about the use of script-targeted URLs—such as 'javascript:...'."
+			},
+			{
+				"name": "sub",
+				"value": true,
+				"description": "This option suppresses warnings about using '[]' notation when it can be expressed in dot notation: 'person['name']' vs. 'person.name'.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "supernew",
+				"value": true,
+				"description": "This option suppresses warnings about 'weird' constructions like 'new function () { ... }' and 'new Object;'. "
+			},
+			{
+				"name": "laxbreak",
+				"value": true,
+				"description": "This option suppresses most of the warnings about possibly unsafe line breakings in your code.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "laxcomma",
+				"value": true,
+				"description": "This option suppresses warnings about comma-first coding style.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "validthis",
+				"value": true,
+				"description": "This option suppresses warnings about possible strict violations when the code is running in strict mode and you use 'this' in a non-constructor function."
+			},
+			{
+				"name": "withstmt",
+				"value": true,
+				"description": "This option suppresses warnings about the use of the 'with' statement. The semantics of the 'with' statement can cause confusion among developers and accidental definition of global variables."
+			},
+			{
+				"name": "moz",
+				"value": true,
+				"description": "This options tells JSHint that your code uses Mozilla JavaScript extensions. Unless you develop specifically for the Firefox web browser you don't need this option."
+			},
+			{
+				"name": "noyield",
+				"value": true,
+				"description": "This option suppresses warnings about generator functions with no 'yield' statement in them."
+			},
+			{
+				"name": "eqnull",
+				"value": true,
+				"description": "This option suppresses warnings about '== null' comparisons. Such comparisons are often useful when you want to check if a variable is 'null' or 'undefined'."
+			},
+			{
+				"name": "lastsemic",
+				"value": true,
+				"description": "This option suppresses warnings about missing semicolons, but only when the semicolon is omitted for the last statement in a one-line block."
+			},
+			{
+				"name": "loopfunc",
+				"value": true,
+				"description": "This option suppresses warnings about functions inside of loops."
+			},
+			{
+				"name": "expr",
+				"value": true,
+				"description": "This option suppresses warnings about the use of expressions where normally you would expect to see assignments or function calls. Most of the time, such code is a typo. However, it is not forbidden by the spec and that's why this warning is optional."
+			},
+			{
+				"name": "esnext",
+				"value": true,
+				"description": "This option tells JSHint that your code uses ECMAScript 6 specific syntax. Note that not all browsers implement these features.",
+				"deprecated": "Use 'esversion: 6' instead."
+			},
+			{
+				"name": "elision",
+				"value": true,
+				"description": "This option tells JSHint that your code uses ES3 array elision elements, or empty elements (for example, '[1, , , 4, , , 7]')."
+			}
+		]
+	},
+	"environments": {
+		"description": "These options let JSHint know about some pre-defined global variables.",
+		"options": [
+			{
+				"name": "mootools",
+				"value": true,
+				"description": "This option defines globals exposed by the MooTools JavaScript framework."
+			},
+			{
+				"name": "couch",
+				"value": true,
+				"description": "This option defines globals exposed by CouchDB."
+			},
+			{
+				"name": "jasmine",
+				"value": true,
+				"description": "This option defines globals exposed by [the Jasmine unit testing framework."
+			},
+			{
+				"name": "jquery",
+				"value": true,
+				"description": "This option defines globals exposed by the jQuery JavaScript library."
+			},
+			{
+				"name": "node",
+				"value": true,
+				"description": "This option defines globals available when your code is running inside of the Node runtime environment."
+			},
+			{
+				"name": "qunit",
+				"value": true,
+				"description": "This option defines globals exposed by the QUnit unit testing framework."
+			},
+			{
+				"name": "rhino",
+				"value": true,
+				"description": "This option defines globals available when your code is running inside of the Rhino runtime environment."
+			},
+			{
+				"name": "shelljs",
+				"value": true,
+				"description": "This option defines globals exposed by the ShellJS library."
+			},
+			{
+				"name": "prototypejs",
+				"value": true,
+				"description": "This option defines globals exposed by the YUI JavaScript framework."
+			},
+			{
+				"name": "yui",
+				"value": true,
+				"description": "This option defines globals exposed by the YUI JavaScript framework."
+			},
+			{
+				"name": "mocha",
+				"value": true,
+				"description": "This option defines globals exposed by the 'BDD' and 'TDD' UIs of the Mocha unit testing framework."
+			},
+			{
+				"name": "module",
+				"value": true,
+				"description": "This option informs JSHint that the input code describes an ECMAScript 6 module. All module code is interpreted as strict mode code."
+			},
+			{
+				"name": "wsh",
+				"value": true,
+				"description": "This option defines globals available when your code is running as a script for the Windows Script Host."
+			},
+			{
+				"name": "worker",
+				"value": true,
+				"description": "This option defines globals available when your code is running inside of a Web Worker."
+			},
+			{
+				"name": "nonstandard",
+				"value": true,
+				"description": "This option defines non-standard but widely adopted globals such as 'escape' and 'unescape'."
+			},
+			{
+				"name": "browser",
+				"value": true,
+				"description": "This option defines globals exposed by modern browsers: all the way from good old 'document' and 'navigator' to the HTML5 'FileReader' and other new developments in the browser world."
+			},
+			{
+				"name": "browserify",
+				"value": true,
+				"description": "This option defines globals available when using the Browserify tool to build a project."
+			},
+			{
+				"name": "devel",
+				"value": true,
+				"description": "This option defines globals that are usually used for logging poor-man's debugging: 'console', 'alert', etc. It is usually a good idea to not ship them in production because, for example, 'console.log' breaks in legacy versions of Internet Explorer."
+			},
+			{
+				"name": "dojo",
+				"value": true,
+				"description": "This option defines globals exposed by the Dojo Toolkit."
+			},
+			{
+				"name": "typed",
+				"value": true,
+				"description": "This option defines globals for typed array constructors."
+			},
+			{
+				"name": "phantom",
+				"value": true,
+				"description": "This option defines globals available when your core is running inside of the PhantomJS runtime environment."
+			}
+		]
+	},
+	"values": {
+		"description": "These are the JSHint options that can take any value.",
+		"options": [
+			{
+				"name": "maxlen",
+				"value": false,
+				"description": "This option lets you set the maximum length of a line."
+			},
+			{
+				"name": "indent",
+				"value": false,
+				"description": "This option sets a specific tab width for your code."
+			},
+			{
+				"name": "maxerr",
+				"value": false,
+				"description": "This options allows you to set the maximum amount of warnings JSHint will produce before giving up. Default is 50."
+			},
+			{
+				"name": "predef",
+				"value": false,
+				"description": "This option allows you to control which variables JSHint considers to be implicitly defined in the environment. Configure it with an array of string values. Prefixing a variable name with a hyphen (-) character will remove that name from the collection of predefined variables."
+			},
+			{
+				"name": "globals",
+				"value": false,
+				"description": "This option can be used to specify a white list of global variables that are not formally defined in the source code. This is most useful when combined with the 'undef' option in order to suppress warnings for project-specific global variables."
+			},
+			{
+				"name": "quotmark",
+				"value": false,
+				"description": "This option enforces the consistency of quotation marks used throughout your code. It accepts three values: 'true' if you don't want to enforce one particular style but want some consistency, '\"single\"' if you want to allow only single quotes and '\"double\"' if you want to allow only double quotes.",
+				"deprecated": "JSHint is limiting its scope to issues of code correctness."
+			},
+			{
+				"name": "scope",
+				"value": false,
+				"description": "Define the scope."
+			},
+			{
+				"name": "maxstatements",
+				"value": false,
+				"description": "This option lets you set the max number of statements allowed per function,"
+			},
+			{
+				"name": "maxdepth",
+				"value": false,
+				"description": "This option lets you control how nested do you want your blocks to be."
+			},
+			{
+				"name": "maxparams",
+				"value": false,
+				"description": "This option lets you set the max number of formal parameters allowed per function."
+			},
+			{
+				"name": "maxcomplexity",
+				"value": false,
+				"description": "This option lets you control cyclomatic complexity throughout your code."
+			},
+			{
+				"name": "shadow",
+				"value": false,
+				"description": "This option suppresses warnings about variable shadowing i.e. declaring a variable that had been already declared somewhere in the outer scope."
+			},
+			{
+				"name": "strict",
+				"value": true,
+				"description": "This option requires the code to run in ECMAScript 5's strict mode. Strict mode is a way to opt in to a restricted variant of JavaScript."
+			},
+			{
+				"name": "unused",
+				"value": true,
+				"description": "This option warns when you define and never use your variables."
+			},
+			{
+				"name": "latedef",
+				"value": false,
+				"description": "This option prohibits the use of a variable before it was defined."
+			},
+			{
+				"name": "ignore",
+				"value": false,
+				"description": "Start/end ignoring lines of code, bypassing the lexer."
+			},
+			{
+				"name": "ignoreDelimiters",
+				"value": false,
+				"description": "Array of start/end delimiters used to ignore certain chunks from code."
+			},
+			{
+				"name": "esversion",
+				"value": 5,
+				"description": "This option is used to specify the ECMAScript version to which the code must adhere."
+			}
+		]
+	},
+	"obsolete": {
+		"description": "Obsolete options.",
+		"options": [
+			{
+				"name": "onecase",
+				"value": true,
+				"description": "If one case switch statements should be allowed."
+			},
+			{
+				"name": "regexp",
+				"value": true,
+				"description": "If the . should not be allowed in regexp literals."
+			},
+			{
+				"name": "regexdash",
+				"value": true,
+				"description": "If unescaped first/last dash (-) inside brackets should be tolerated."
+			}
+		]
+	}
+}

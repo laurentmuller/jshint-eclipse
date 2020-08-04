@@ -1,0 +1,266 @@
+/*******************************************************************************
+ * Copyright (c) 2012, 2013 EclipseSource and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Ralf Sternberg - initial implementation and API
+ ******************************************************************************/
+package com.eclipsesource.jshint.ui.preferences.ui;
+
+import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridData;
+import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridLayout;
+
+import java.io.File;
+import java.io.FileInputStream;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+
+import com.eclipsesource.jshint.JSHint;
+import com.eclipsesource.jshint.ui.Activator;
+import com.eclipsesource.jshint.ui.builder.BuilderUtil;
+import com.eclipsesource.jshint.ui.builder.JSHintBuilder;
+import com.eclipsesource.jshint.ui.preferences.JSHintPreferences;
+
+public class JSHintPreferencePage extends PreferencePage
+		implements IWorkbenchPreferencePage {
+
+	private static void validateFile(final File file)
+			throws IllegalArgumentException {
+		if (!file.isFile()) {
+			throw new IllegalArgumentException("File does not exist");
+		}
+		if (!file.canRead()) {
+			throw new IllegalArgumentException("File is not readable");
+		}
+		try {
+			final FileInputStream inputStream = new FileInputStream(file);
+			try {
+				final JSHint jsHint = new JSHint();
+				jsHint.load(inputStream);
+			} finally {
+				inputStream.close();
+			}
+		} catch (final Exception exception) {
+			throw new IllegalArgumentException(
+					"File is not a valid JSHint library", exception);
+		}
+	}
+
+	private final JSHintPreferences preferences;
+	private Button defaultLibRadio;
+	private Button customLibRadio;
+	private Text customLibPathText;
+	private Button customLibPathButton;
+
+	private Button enableErrorsCheckbox;
+
+	public JSHintPreferencePage() {
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setDescription("General settings for JSHint");
+		preferences = new JSHintPreferences();
+	}
+
+	@Override
+	public void init(final IWorkbench workbench) {
+	}
+
+	@Override
+	public boolean performOk() {
+		try {
+			if (preferences.hasChanged()) {
+				preferences.save();
+				triggerRebuild();
+			}
+		} catch (final CoreException exception) {
+			Activator.handleError("Failed to save preferences", exception);
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	protected Control createContents(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		gridLayout(composite).columns(3).spacing(3).marginTop(10);
+		createCustomJSHintArea(composite);
+		createEnableErrorMarkersArea(composite);
+		updateControlsFromPrefs();
+		updateControlsEnabled();
+		return composite;
+	}
+
+	@Override
+	protected IPreferenceStore doGetPreferenceStore() {
+		return null;
+	}
+
+	@Override
+	protected void performDefaults() {
+		preferences.resetToDefaults();
+		updateControlsFromPrefs();
+		updateControlsEnabled();
+		super.performDefaults();
+	}
+
+	private void createCustomJSHintArea(final Composite parent) {
+		defaultLibRadio = new Button(parent, SWT.RADIO);
+		final String version = JSHint.getDefaultLibraryVersion();
+		defaultLibRadio.setText(
+				"Use the &built-in JSHint library (version " + version + ")");
+		gridData(defaultLibRadio).fillHorizontal().span(3, 1);
+		customLibRadio = new Button(parent, SWT.RADIO);
+		customLibRadio.setText("Provide a &custom JSHint library file");
+		gridData(customLibRadio).fillHorizontal().span(3, 1);
+		customLibRadio.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
+				preferences.setUseCustomLib(customLibRadio.getSelection());
+				validate();
+				updateControlsEnabled();
+			}
+		});
+		customLibPathText = new Text(parent, SWT.BORDER);
+		gridData(customLibPathText).fillHorizontal().span(2, 1).indent(25, 0);
+		customLibPathText.addListener(SWT.Modify, new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
+				preferences.setCustomLibPath(customLibPathText.getText());
+				validate();
+			}
+		});
+		customLibPathButton = new Button(parent, SWT.PUSH);
+		customLibPathButton.setText("Select");
+		setButtonLayoutData(customLibPathButton);
+		// gridData(customLibPathButton).widthHint(IDialogConstants.BUTTON_WIDTH);
+		customLibPathButton.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
+				selectFile();
+			}
+		});
+		final Text customLibPathLabelText = new Text(parent,
+				SWT.READ_ONLY | SWT.WRAP);
+		customLibPathLabelText
+				.setText("This file is usually named 'jshint.js'.");
+		customLibPathLabelText.setBackground(parent.getBackground());
+		gridData(customLibPathLabelText).fillHorizontal().span(3, 1).indent(25,
+				1);
+	}
+
+	private void createEnableErrorMarkersArea(final Composite parent) {
+		enableErrorsCheckbox = new Button(parent, SWT.CHECK);
+		enableErrorsCheckbox.setText("Enable JSHint errors");
+		enableErrorsCheckbox.setToolTipText(
+				"If unchecked, errors will be shown as warnings");
+		gridData(enableErrorsCheckbox).fillHorizontal().span(3, 1);
+		enableErrorsCheckbox.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				preferences.setEnableErrorMarkers(
+						enableErrorsCheckbox.getSelection());
+				validate();
+			}
+		});
+	}
+
+	private void selectFile() {
+		final FileDialog fileDialog = new FileDialog(getShell(), SWT.OPEN);
+		fileDialog.setText("Select JSHint library file");
+		final File file = new File(preferences.getCustomLibPath());
+		fileDialog.setFileName(file.getName());
+		fileDialog.setFilterPath(file.getParent());
+		fileDialog.setFilterNames(new String[] { "JavaScript files" });
+		fileDialog.setFilterExtensions(new String[] { "*.js", "" });
+		final String selectedPath = fileDialog.open();
+		if (selectedPath != null) {
+			customLibPathText.setText(selectedPath);
+		}
+	}
+
+	private void triggerRebuild() throws CoreException {
+		final IProject[] projects = ResourcesPlugin.getWorkspace().getRoot()
+				.getProjects();
+		for (final IProject project : projects) {
+			if (project.isAccessible()) {
+				BuilderUtil.triggerClean(project, JSHintBuilder.ID);
+			}
+		}
+	}
+
+	private void updateControlsEnabled() {
+		final boolean enabled = customLibRadio.getSelection();
+		customLibPathText.setEnabled(enabled);
+		customLibPathButton.setEnabled(enabled);
+	}
+
+	private void updateControlsFromPrefs() {
+		customLibRadio.setSelection(preferences.getUseCustomLib());
+		defaultLibRadio.setSelection(!customLibRadio.getSelection());
+		customLibPathText.setText(preferences.getCustomLibPath());
+		enableErrorsCheckbox.setSelection(preferences.getEnableErrorMarkers());
+	}
+
+	private void validate() {
+		setErrorMessage(null);
+		setValid(false);
+		final Display display = getShell().getDisplay();
+		final Job validator = new Job("JSHint preferences validation") {
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+				try {
+					monitor.beginTask("checking preferences", 1);
+					validatePrefs();
+					display.asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							setValid(true);
+						}
+					});
+				} catch (final IllegalArgumentException exception) {
+					display.asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							setErrorMessage(exception.getMessage());
+						}
+					});
+				} finally {
+					monitor.done();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		validator.schedule();
+	}
+
+	private void validatePrefs() {
+		if (preferences.getUseCustomLib()) {
+			final String path = preferences.getCustomLibPath();
+			validateFile(new File(path));
+		}
+	}
+
+}

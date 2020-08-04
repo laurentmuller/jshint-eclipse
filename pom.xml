@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<properties>
+		<tycho-version>1.6.0</tycho-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<eclipse.repo>http://download.eclipse.org/releases/latest</eclipse.repo>
+		<orbit.repo>https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository</orbit.repo>
+	</properties>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<name>jshint-eclipse</name>
+
+	<groupId>com.eclipsesource.jshint</groupId>
+	<artifactId>com.eclipsesource.jshint.build</artifactId>
+	<version>2.11.0</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>bundles/com.eclipsesource.jshint</module>
+		<module>bundles/com.eclipsesource.jshint.ui</module>
+		<module>releng/com.eclipsesource.jshint.repository</module>
+		<module>releng/com.eclipsesource.jshint.feature</module>
+	</modules>
+
+	<!-- repositories to get pre-built pieces from -->
+	<repositories>
+		<repository>
+			<id>eclipse-repo</id>
+			<layout>p2</layout>
+			<url>${eclipse.repo}</url>
+		</repository>
+		<repository>
+			<id>orbit</id>
+			<layout>p2</layout>
+			<url>${orbit.repo}</url>
+		</repository>
+	</repositories>
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<!-- Enable Tycho -->
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<finalName>yyyyMMdd-HHmm</finalName>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<environments>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+			
+		</plugins>
+	</build>
+
+</project>

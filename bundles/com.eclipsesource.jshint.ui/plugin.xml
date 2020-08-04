@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+        point="org.eclipse.ui.propertyPages">
+        <page
+            id="com.eclipsesource.jshint.ui.properties.projectPropertyPage"
+            class="com.eclipsesource.jshint.ui.preferences.ui.ProjectPropertyPage"
+            name="JSHint">
+            <enabledWhen>
+                <adapt
+                    type="org.eclipse.core.resources.IResource">
+                    <instanceof
+                        value="org.eclipse.core.resources.IProject" />
+                </adapt>
+            </enabledWhen>
+        </page>
+        <page
+            id="com.eclipsesource.jshint.ui.properties.configPropertyPage"
+            category="com.eclipsesource.jshint.ui.properties.projectPropertyPage"
+            class="com.eclipsesource.jshint.ui.preferences.ui.ConfigurationPropertyPage"
+            name="Configuration">
+            <enabledWhen>
+                <adapt
+                    type="org.eclipse.core.resources.IResource">
+                    <instanceof
+                        value="org.eclipse.core.resources.IProject" />
+                </adapt>
+            </enabledWhen>
+        </page>
+    </extension>
+    <extension
+        point="org.eclipse.ui.preferencePages">
+        <page
+            id="com.eclipsesource.jshint.ui.mainPreferencePage"
+            class="com.eclipsesource.jshint.ui.preferences.ui.JSHintPreferencePage"
+            name="JSHint" />
+        <page
+            id="com.eclipsesource.jshint.ui.configPreferencePage"
+            category="com.eclipsesource.jshint.ui.mainPreferencePage"
+            class="com.eclipsesource.jshint.ui.preferences.ui.ConfigurationPreferencePage"
+            name="Configuration" />
+    </extension>
+    <extension
+        id="builder"
+        name="JSHint Problem Checker"
+        point="org.eclipse.core.resources.builders">
+        <builder
+            callOnEmptyDelta="false"
+            hasNature="false"
+            isConfigurable="false"
+            supportsConfigurations="false">
+            <run
+                class="com.eclipsesource.jshint.ui.builder.JSHintBuilder" />
+        </builder>
+    </extension>
+    <extension
+        id="problemmarker"
+        name="JSHint Problem"
+        point="org.eclipse.core.resources.markers">
+        <persistent
+            value="true" />
+        <super
+            type="org.eclipse.core.resources.problemmarker" />
+        <super
+            type="org.eclipse.core.resources.textmarker" />
+    </extension>
+    <extension
+          point="org.eclipse.ui.commands">
+       <command
+             categoryId="org.eclipse.ui.category.file"
+             defaultHandler="com.eclipsesource.jshint.ui.help.MarkerHelpHandler"
+             description="Display Explanation about the JSHint problem."
+             id="com.eclipsesource.jshint.ui.marker.help"
+             name="Explanation">
+       </command>
+    </extension>
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             class="com.eclipsesource.jshint.ui.help.MarkerHelpHandler"
+             commandId="com.eclipsesource.jshint.ui.marker.help">
+       </handler>
+    </extension>
+    <extension
+          point="org.eclipse.ui.menus">
+       <menuContribution
+             allPopups="false"
+             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+          <command
+                commandId="com.eclipsesource.jshint.ui.marker.help"
+                style="push">
+             <visibleWhen
+                   checkEnabled="true">
+                <adapt
+                      type="org.eclipse.core.resources.IMarker">
+                </adapt>
+             </visibleWhen>
+          </command>
+       </menuContribution>
+    </extension>
+</plugin>
