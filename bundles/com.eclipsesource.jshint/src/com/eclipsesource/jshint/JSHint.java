@@ -51,7 +51,7 @@ public class JSHint {
 	/**
 	 * The JSHint library version.
 	 */
-	private static final String DEFAULT_JSHINT_VERSION = "2.11.0";
+	private static final String DEFAULT_JSHINT_VERSION = "2.12.0";
 
 	/*
 	 * the default JSON indentation
@@ -105,7 +105,7 @@ public class JSHint {
 	private static BufferedReader getJsHintReader() throws IOException {
 		// Include DEFAULT_JSHINT_VERSION in name to ensure the constant matches
 		// the actual version
-		final String name = String.format("com/jshint/jshint-%s.js",
+		final String name = String.format("com/jshint/jshint.%s.js",
 				DEFAULT_JSHINT_VERSION);
 
 		final ClassLoader classLoader = JSHint.class.getClassLoader();
