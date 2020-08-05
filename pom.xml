@@ -22,10 +22,10 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>bundles/com.eclipsesource.jshint</module>
-		<module>bundles/com.eclipsesource.jshint.ui</module>
-		<module>releng/com.eclipsesource.jshint.repository</module>
-		<module>releng/com.eclipsesource.jshint.feature</module>
+		<module>com.eclipsesource.jshint</module>
+		<module>com.eclipsesource.jshint.ui</module>
+		<module>com.eclipsesource.jshint.repository</module>
+		<module>com.eclipsesource.jshint.feature</module>
 	</modules>
 
 	<!-- repositories to get pre-built pieces from -->

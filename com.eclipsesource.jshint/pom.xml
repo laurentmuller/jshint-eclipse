@@ -10,7 +10,7 @@
 		<groupId>com.eclipsesource.jshint</groupId>
 		<artifactId>com.eclipsesource.jshint.build</artifactId>
 		<version>2.12.0</version>
-		<relativePath>../../pom.xml</relativePath>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 </project>

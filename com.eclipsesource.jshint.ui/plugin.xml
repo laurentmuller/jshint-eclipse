@@ -65,38 +65,4 @@
         <super
             type="org.eclipse.core.resources.textmarker" />
     </extension>
-    <extension
-          point="org.eclipse.ui.commands">
-       <command
-             categoryId="org.eclipse.ui.category.file"
-             defaultHandler="com.eclipsesource.jshint.ui.help.MarkerHelpHandler"
-             description="Display Explanation about the JSHint problem."
-             id="com.eclipsesource.jshint.ui.marker.help"
-             name="Explanation">
-       </command>
-    </extension>
-    <extension
-          point="org.eclipse.ui.handlers">
-       <handler
-             class="com.eclipsesource.jshint.ui.help.MarkerHelpHandler"
-             commandId="com.eclipsesource.jshint.ui.marker.help">
-       </handler>
-    </extension>
-    <extension
-          point="org.eclipse.ui.menus">
-       <menuContribution
-             allPopups="false"
-             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-          <command
-                commandId="com.eclipsesource.jshint.ui.marker.help"
-                style="push">
-             <visibleWhen
-                   checkEnabled="true">
-                <adapt
-                      type="org.eclipse.core.resources.IMarker">
-                </adapt>
-             </visibleWhen>
-          </command>
-       </menuContribution>
-    </extension>
 </plugin>
