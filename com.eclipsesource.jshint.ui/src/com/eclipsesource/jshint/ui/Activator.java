@@ -46,18 +46,6 @@ public class Activator extends AbstractUIPlugin {
 		return instance;
 	}
 
-	// /**
-	// * Returns an image descriptor for the image file at the given plug-in
-	// * relative path
-	// *
-	// * @param path
-	// * the path
-	// * @return the image descriptor
-	// */
-	// public static ImageDescriptor getImageDescriptor(final String path) {
-	// return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	// }
-
 	public static void handleError(final IStatus status) {
 		if (status != null) {
 			StatusManager.getManager().handle(status);
@@ -66,7 +54,8 @@ public class Activator extends AbstractUIPlugin {
 
 	public static void handleError(final String message,
 			final Throwable exception) {
-		handleError(createError(message, exception));
+		final IStatus status = createError(message, exception);
+		handleError(status);
 	}
 
 	@Override
