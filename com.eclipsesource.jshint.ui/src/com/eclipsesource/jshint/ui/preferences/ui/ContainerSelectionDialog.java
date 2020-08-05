@@ -75,16 +75,11 @@ public class ContainerSelectionDialog extends ElementTreeSelectionDialog {
 		}
 
 		private boolean isContainer(final IResource resource) {
-			if (!resource.exists() || resource.isHidden()) {
+			if (!resource.exists() || resource.isHidden()
+					|| !(resource instanceof IContainer)) {
 				return false;
 			}
-			if (!(resource instanceof IContainer)) {
-				return false;
-			}
-			if (resource.getName().charAt(0) == '.') {
-				return false;
-			}
-			return true;
+			return resource.getName().charAt(0) != '.';
 		}
 	};
 
