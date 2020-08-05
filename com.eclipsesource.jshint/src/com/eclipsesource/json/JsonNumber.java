@@ -11,6 +11,7 @@
 package com.eclipsesource.json;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @SuppressWarnings("serial") // use default serial UID
 public class JsonNumber extends JsonValue {
@@ -18,9 +19,7 @@ public class JsonNumber extends JsonValue {
 	private final String string;
 
 	JsonNumber(final String string) {
-		if (string == null) {
-			throw new NullPointerException("string is null");
-		}
+		Objects.requireNonNull(string, "The 'string' parameter is null.");
 		this.string = string;
 	}
 

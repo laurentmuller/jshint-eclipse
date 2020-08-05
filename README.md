@@ -3,9 +3,9 @@ JSHint integration for the Eclipse IDE
 
 ![JSHint](jshint.png)
 
-[![Build Status](https://travis-ci.com/laurentmuller/jshint-eclipse.svg?branch=master)](https://travis-ci.com/laurentmuller/jshint-eclipse)
+[![Build Status](https://travis-ci.com/laurentmuller/jshint-eclipse.svg?branch=master)](https://travis-ci.com/laurentmuller/jshint-eclipse) ![Maven Build](https://github.com/laurentmuller/jshint-eclipse/workflows/Maven%20Build/badge.svg) ![Maven Package](https://github.com/laurentmuller/jshint-eclipse/workflows/Maven%20Package/badge.svg) [![Branch Master](https://img.shields.io/badge/branch-master-blue.svg)](https://github.com/laurentmuller/jshint-eclipse/tree/master)
 
-[JSHint](http://www.jshint.com/about/) is a popular, community-driven tool to detect errors and potential problems in JavaScript code.  This project integrates JSHint into the Eclipse IDE.  It automatically validates \*.js files and adds warning markers for every problem found by JSHint.
+[JSHint](http://www.jshint.com/about/) is a popular, community-driven tool to detect errors and potential problems in JavaScript code. This project integrates JSHint into the Eclipse IDE. It automatically validates \*.js files and adds warning markers for every problem found by JSHint.
 
 Requirements
 ------------
@@ -27,5 +27,4 @@ License
 
 The code is published under the terms of the [Eclipse Public License, version 1.0](http://www.eclipse.org/legal/epl-v10.html).
 
-Includes code from [jshint](https://github.com/jshint/jshint/), which is published under the terms of the  [MIT Expat license](https://www.gnu.org/licenses/license-list.html#Expat).
-
+Includes code from [jshint](https://github.com/jshint/jshint/), which is published under the terms of the [MIT Expat license](https://www.gnu.org/licenses/license-list.html#Expat).

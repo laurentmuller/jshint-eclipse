@@ -19,13 +19,13 @@ import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 import com.eclipsesource.jshint.ui.Activator;
-import com.eclipsesource.jshint.ui.preferences.PreferencesFactory;
+import com.eclipsesource.jshint.ui.preferences.PreferencesFactoryUtils;
 
 public abstract class AbstractPropertyPage extends PropertyPage {
 
 	protected Preferences getPreferences() {
 		final IProject project = getResource().getProject();
-		return PreferencesFactory.getProjectPreferences(project);
+		return PreferencesFactoryUtils.getProjectPreferences(project);
 	}
 
 	protected IResource getResource() {

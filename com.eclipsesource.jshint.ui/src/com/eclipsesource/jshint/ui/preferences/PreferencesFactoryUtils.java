@@ -17,15 +17,21 @@ import org.osgi.service.prefs.Preferences;
 
 import com.eclipsesource.jshint.ui.Activator;
 
-public class PreferencesFactory {
+public class PreferencesFactoryUtils {
 
 	public static Preferences getProjectPreferences(final IProject project) {
 		return new ProjectScope(project).getNode(Activator.PLUGIN_ID);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static Preferences getWorkspacePreferences() {
-		// InstanceScope.INSTANCE does not yet exist in Eclipse 3.6
-		return new InstanceScope().getNode(Activator.PLUGIN_ID);
+		return InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+	}
+
+	/*
+	 * prevent instance creation
+	 */
+	private PreferencesFactoryUtils() {
+		throw new AssertionError(
+				"No PreferencesFactoryUtils instances is allowed"); //$NON-NLS-1$
 	}
 }

@@ -54,7 +54,7 @@ public class JSHintPreferences {
 		final ReadWriteLock lock = new ReentrantReadWriteLock();
 		readLock = lock.readLock();
 		writeLock = lock.writeLock();
-		node = PreferencesFactory.getWorkspacePreferences();
+		node = PreferencesFactoryUtils.getWorkspacePreferences();
 		useCustomLib = node.getBoolean(KEY_USE_CUSTOM_LIB, DEF_USE_CUSTOM_LIB);
 		customLibPath = node.get(KEY_CUSTOM_LIB_PATH, DEF_CUSTOM_LIB_PATH);
 		enableErrorMarkers = node.getBoolean(KEY_ENABLE_ERROR_MARKERS,

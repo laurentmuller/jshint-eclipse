@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences.ui;
 
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridLayout;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridLayout;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;

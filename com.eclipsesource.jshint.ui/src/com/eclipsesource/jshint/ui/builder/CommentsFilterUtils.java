@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.builder;
 
-public final class CommentsFilter {
+public final class CommentsFilterUtils {
 
 	private static final char CARRIAGE_RETURN = '\r';
 	private static final char LINE_FEED = '\n';
@@ -57,6 +57,10 @@ public final class CommentsFilter {
 		return new String(chars);
 	}
 
-	private CommentsFilter() {
+	/*
+	 * prevent instance creation
+	 */
+	private CommentsFilterUtils() {
+		throw new AssertionError("No CommentsFilterUtils instances is allowed"); //$NON-NLS-1$
 	}
 }

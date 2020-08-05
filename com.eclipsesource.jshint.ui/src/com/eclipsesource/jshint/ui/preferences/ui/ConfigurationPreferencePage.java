@@ -10,9 +10,9 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences.ui;
 
-import static com.eclipsesource.jshint.ui.util.JsonUtil.jsonEquals;
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridData;
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridLayout;
+import static com.eclipsesource.jshint.ui.util.JsonUtils.jsonEquals;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridData;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridLayout;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -36,11 +36,11 @@ import org.osgi.service.prefs.Preferences;
 
 import com.eclipsesource.jshint.JSHint;
 import com.eclipsesource.jshint.ui.Activator;
-import com.eclipsesource.jshint.ui.builder.BuilderUtil;
+import com.eclipsesource.jshint.ui.builder.BuilderUtils;
 import com.eclipsesource.jshint.ui.builder.JSHintBuilder;
 import com.eclipsesource.jshint.ui.options.JSHintOption;
 import com.eclipsesource.jshint.ui.preferences.OptionsPreferences;
-import com.eclipsesource.jshint.ui.preferences.PreferencesFactory;
+import com.eclipsesource.jshint.ui.preferences.PreferencesFactoryUtils;
 
 public class ConfigurationPreferencePage extends PreferencePage
 		implements IWorkbenchPreferencePage {
@@ -191,13 +191,13 @@ public class ConfigurationPreferencePage extends PreferencePage
 	private void triggerRebuild() throws CoreException {
 		for (final IProject project : getProjects()) {
 			if (project.isAccessible()) {
-				BuilderUtil.triggerClean(project, JSHintBuilder.ID);
+				BuilderUtils.triggerClean(project, JSHintBuilder.ID);
 			}
 		}
 	}
 
 	Preferences getPreferences() {
-		return PreferencesFactory.getWorkspacePreferences();
+		return PreferencesFactoryUtils.getWorkspacePreferences();
 	}
 
 	IProject[] getProjects() {

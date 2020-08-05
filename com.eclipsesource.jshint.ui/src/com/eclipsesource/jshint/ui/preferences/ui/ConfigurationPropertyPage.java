@@ -10,10 +10,10 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences.ui;
 
-import static com.eclipsesource.jshint.ui.util.IOUtil.readUtf8File;
-import static com.eclipsesource.jshint.ui.util.IOUtil.writeUtf8File;
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridData;
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridLayout;
+import static com.eclipsesource.jshint.ui.util.IOUtils.readUtf8File;
+import static com.eclipsesource.jshint.ui.util.IOUtils.writeUtf8File;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridData;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridLayout;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -32,11 +32,11 @@ import org.eclipse.swt.widgets.Listener;
 
 import com.eclipsesource.jshint.JSHint;
 import com.eclipsesource.jshint.ui.Activator;
-import com.eclipsesource.jshint.ui.builder.BuilderUtil;
+import com.eclipsesource.jshint.ui.builder.BuilderUtils;
 import com.eclipsesource.jshint.ui.builder.JSHintBuilder;
 import com.eclipsesource.jshint.ui.options.JSHintOption;
 import com.eclipsesource.jshint.ui.preferences.OptionsPreferences;
-import com.eclipsesource.jshint.ui.util.JsonUtil;
+import com.eclipsesource.jshint.ui.util.JsonUtils;
 
 public class ConfigurationPropertyPage extends AbstractPropertyPage {
 
@@ -235,7 +235,7 @@ public class ConfigurationPropertyPage extends AbstractPropertyPage {
 
 	private boolean storeConfig() throws CoreException {
 		final String content = editor.getText();
-		final boolean changed = !JsonUtil.jsonEquals(content,
+		final boolean changed = !JsonUtils.jsonEquals(content,
 				originalConfiguration);
 		writeUtf8File(getConfigFile(), content);
 		originalConfiguration = content;
@@ -255,6 +255,6 @@ public class ConfigurationPropertyPage extends AbstractPropertyPage {
 
 	private void triggerRebuild() throws CoreException {
 		final IProject project = getResource().getProject();
-		BuilderUtil.triggerClean(project, JSHintBuilder.ID);
+		BuilderUtils.triggerClean(project, JSHintBuilder.ID);
 	}
 }

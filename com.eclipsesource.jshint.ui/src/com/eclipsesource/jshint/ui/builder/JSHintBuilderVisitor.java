@@ -34,7 +34,7 @@ import com.eclipsesource.jshint.ui.Activator;
 import com.eclipsesource.jshint.ui.builder.JSHintBuilder.CoreExceptionWrapper;
 import com.eclipsesource.jshint.ui.preferences.EnablementPreferences;
 import com.eclipsesource.jshint.ui.preferences.JSHintPreferences;
-import com.eclipsesource.jshint.ui.preferences.PreferencesFactory;
+import com.eclipsesource.jshint.ui.preferences.PreferencesFactoryUtils;
 import com.eclipsesource.jshint.ui.preferences.ResourceSelector;
 
 class JSHintBuilderVisitor implements IResourceVisitor, IResourceDeltaVisitor {
@@ -80,7 +80,7 @@ class JSHintBuilderVisitor implements IResourceVisitor, IResourceDeltaVisitor {
 
 	public JSHintBuilderVisitor(final IProject project,
 			final IProgressMonitor monitor) throws CoreException {
-		final Preferences node = PreferencesFactory
+		final Preferences node = PreferencesFactoryUtils
 				.getProjectPreferences(project);
 		new EnablementPreferences(node);
 		selector = new ResourceSelector(project);

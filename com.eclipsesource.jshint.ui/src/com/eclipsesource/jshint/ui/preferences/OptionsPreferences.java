@@ -10,9 +10,13 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences;
 
-import static com.eclipsesource.jshint.ui.util.JsonUtil.prettyPrint;
+import static com.eclipsesource.jshint.ui.util.JsonUtils.prettyPrint;
+
+import java.io.IOException;
 
 import org.osgi.service.prefs.Preferences;
+
+import com.eclipsesource.json.JsonObject;
 
 public class OptionsPreferences {
 
@@ -45,13 +49,6 @@ public class OptionsPreferences {
 		return node;
 	}
 
-	private String getOldConfig() {
-		final String options = node.get(KEY_OPTIONS, "");
-		final String globals = node.get(KEY_GLOBALS, "");
-		return prettyPrint(
-				OptionParserUtil.createConfiguration(options, globals));
-	}
-
 	public boolean getProjectSpecific() {
 		return node.getBoolean(KEY_PROJ_SPECIFIC, DEFAULT_PROJ_SPECIFIC);
 	}
@@ -76,6 +73,18 @@ public class OptionsPreferences {
 				node.putBoolean(KEY_PROJ_SPECIFIC, value);
 			}
 			changed = true;
+		}
+	}
+
+	private String getOldConfig() {
+		try {
+			final String options = node.get(KEY_OPTIONS, ""); //$NON-NLS-1$
+			final String globals = node.get(KEY_GLOBALS, ""); //$NON-NLS-1$
+			final JsonObject obj = OptionParserUtils
+					.createConfiguration(options, globals);
+			return prettyPrint(obj);
+		} catch (final IOException e) {
+			return ""; //$NON-NLS-1$
 		}
 	}
 

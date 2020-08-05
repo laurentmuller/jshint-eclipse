@@ -20,7 +20,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 
-public class BuilderUtil {
+public class BuilderUtils {
 
 	public static boolean addBuilderToProject(final IProject project,
 			final String builderId) throws CoreException {
@@ -122,27 +122,6 @@ public class BuilderUtil {
 		return new ArrayList<>(Arrays.asList(commands));
 	}
 
-	// private static void removeBuildCommands(
-	// final IProjectDescription description, final String builderId) {
-	// final ICommand[] oldCommands = description.getBuildSpec();
-	// final List<ICommand> list = new ArrayList<ICommand>();
-	// for (final ICommand command : oldCommands) {
-	// if (!command.getBuilderName().equals(builderId)) {
-	// list.add(command);
-	// }
-	// }
-	// final ICommand[] newCommands = new ICommand[list.size()];
-	// list.toArray(newCommands);
-	// description.setBuildSpec(newCommands);
-	// }
-
-	// private static void setCommands(final IProjectDescription description,
-	// final List<ICommand> commands) {
-	// final ICommand[] buildSpec = commands
-	// .toArray(new ICommand[commands.size()]);
-	// description.setBuildSpec(buildSpec);
-	// }
-
 	private static boolean updateProject(final IProject project,
 			final IProjectDescription description,
 			final List<ICommand> commands) throws CoreException {
@@ -155,7 +134,10 @@ public class BuilderUtil {
 		return true;
 	}
 
-	private BuilderUtil() {
-		// prevent instantiation
+	/*
+	 * prevent instance creation
+	 */
+	private BuilderUtils() {
+		throw new AssertionError("No BuilderUtils instances is allowed"); //$NON-NLS-1$
 	}
 }

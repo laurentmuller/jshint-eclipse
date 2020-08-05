@@ -11,6 +11,7 @@
 package com.eclipsesource.jshint.ui.preferences.ui;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.JFacePreferences;
@@ -27,8 +28,8 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.eclipsesource.jshint.ui.Activator;
 import com.eclipsesource.jshint.ui.options.JSHintOption;
-import com.eclipsesource.jshint.ui.util.IOUtil;
-import com.eclipsesource.jshint.ui.util.JsonUtil;
+import com.eclipsesource.jshint.ui.util.IOUtils;
+import com.eclipsesource.jshint.ui.util.JsonUtils;
 import com.eclipsesource.json.ParseException;
 
 public class ConfigurationEditor extends StyledText {
@@ -61,6 +62,9 @@ public class ConfigurationEditor extends StyledText {
 				case SWT.TRAVERSE_TAB_NEXT:
 				case SWT.TRAVERSE_TAB_PREVIOUS:
 					e.doit = true;
+					break;
+				default:
+					// ignore
 					break;
 				}
 			}
@@ -164,8 +168,8 @@ public class ConfigurationEditor extends StyledText {
 		final File file = selectFile(SWT.SAVE);
 		if (file != null) {
 			try {
-				final String json = JsonUtil.prettyPrint(getText());
-				IOUtil.writeUtf8File(file, json);
+				final String json = JsonUtils.prettyPrint(getText());
+				IOUtils.writeUtf8File(file, json);
 			} catch (final Exception e) {
 				final String msg = String
 						.format("Could not write to file '%s'.", file);
@@ -178,7 +182,7 @@ public class ConfigurationEditor extends StyledText {
 
 	public void formatContent() {
 		try {
-			final String text = JsonUtil.prettyPrint(getText());
+			final String text = JsonUtils.prettyPrint(getText());
 			setText(text);
 		} catch (final Exception e) {
 			// ignore
@@ -189,8 +193,8 @@ public class ConfigurationEditor extends StyledText {
 		final File file = selectFile(SWT.OPEN);
 		if (file != null) {
 			try {
-				final String text = IOUtil.readUtf8File(file);
-				final String json = JsonUtil.prettyPrint(text);
+				final String text = IOUtils.readUtf8File(file);
+				final String json = JsonUtils.prettyPrint(text);
 				setText(json);
 			} catch (final Exception e) {
 				final String msg = String
@@ -216,9 +220,12 @@ public class ConfigurationEditor extends StyledText {
 
 	public void validate() {
 		try {
-			JsonUtil.readFrom(getText());
+			JsonUtils.readFrom(getText());
 			removeErrorMarker();
 			handleError(null);
+
+		} catch (final IOException e) {
+			handleError(e.getMessage());
 
 		} catch (final ParseException e) {
 			final int line = e.getLine() - 1;
@@ -250,14 +257,16 @@ public class ConfigurationEditor extends StyledText {
 		}
 	}
 
-	private String quote(String str) {
-		if (str.isEmpty() || str.charAt(0) != QUOTE_CHAR) {
-			str = QUOTE_CHAR + str;
+	private String quote(final String str) {
+		final StringBuffer buffer = new StringBuffer(str);
+		if (buffer.length() == 0 || buffer.charAt(0) != QUOTE_CHAR) {
+			buffer.insert(0, QUOTE_CHAR);
 		}
-		if (str.length() == 1 || str.charAt(str.length() - 1) != QUOTE_CHAR) {
-			str = str + QUOTE_CHAR;
+		if (buffer.length() == 1
+				|| buffer.charAt(buffer.length() - 1) != QUOTE_CHAR) {
+			buffer.append(QUOTE_CHAR);
 		}
-		return str;
+		return buffer.toString();
 	}
 
 	private void removeErrorMarker() {

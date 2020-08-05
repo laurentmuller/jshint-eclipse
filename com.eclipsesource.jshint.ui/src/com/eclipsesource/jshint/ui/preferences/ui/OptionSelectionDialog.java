@@ -43,7 +43,7 @@ import com.eclipsesource.jshint.ui.options.JSHintGroup;
 import com.eclipsesource.jshint.ui.options.JSHintItem;
 import com.eclipsesource.jshint.ui.options.JSHintOption;
 import com.eclipsesource.jshint.ui.options.JSHintRoot;
-import com.eclipsesource.jshint.ui.util.LayoutUtil;;
+import com.eclipsesource.jshint.ui.util.LayoutUtils;
 
 /**
  * Dialog to select a JSHintOption.
@@ -194,8 +194,8 @@ public class OptionSelectionDialog extends ElementTreeSelectionDialog {
 	protected TreeViewer createTreeViewer(final Composite parent) {
 		// container
 		final Composite container = new Composite(parent, SWT.NONE);
-		LayoutUtil.gridLayout(container).columns(2).spacing(5);
-		LayoutUtil.gridData(container).fillBoth();
+		LayoutUtils.gridLayout(container).columns(2).spacing(5);
+		LayoutUtils.gridData(container).fillBoth();
 
 		// create viewer and buttons
 		final TreeViewer viewer = super.createTreeViewer(container);
@@ -248,7 +248,7 @@ public class OptionSelectionDialog extends ElementTreeSelectionDialog {
 			}
 		});
 		docButton.setEnabled(false);
-		LayoutUtil.gridData(bar).align(SWT.DEFAULT, SWT.TOP);
+		LayoutUtils.gridData(bar).align(SWT.DEFAULT, SWT.TOP);
 	}
 
 	private void displayDocumentation() {

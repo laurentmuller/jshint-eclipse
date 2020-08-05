@@ -70,10 +70,6 @@ public abstract class JsonValue implements Serializable {
 	 */
 	public static final JsonValue NULL = new JsonLiteral("null");
 
-	JsonValue() {
-		// prevent subclasses outside of this package
-	}
-
 	/**
 	 * Reads a JSON value from the given reader.
 	 * <p>
@@ -90,7 +86,7 @@ public abstract class JsonValue implements Serializable {
 	 * @throws ParseException
 	 *             if the input is not valid JSON
 	 */
-	public static JsonValue readFrom(Reader reader) throws IOException {
+	public static JsonValue readFrom(final Reader reader) throws IOException {
 		return new JsonParser(reader).parse();
 	}
 
@@ -100,16 +96,55 @@ public abstract class JsonValue implements Serializable {
 	 * @param text
 	 *            the string that contains the JSON value
 	 * @return the JSON value that has been read
-	 * @throws ParseException
+	 * @throws IOException
 	 *             if the input is not valid JSON
 	 */
-	public static JsonValue readFrom(String text) {
-		try {
-			return new JsonParser(text).parse();
-		} catch (IOException exception) {
-			// JsonParser does not throw IOException for String
-			throw new RuntimeException(exception);
+	public static JsonValue readFrom(final String text) throws IOException {
+		return new JsonParser(text).parse();
+	}
+
+	/**
+	 * Returns a JsonValue instance that represents the given
+	 * <code>boolean</code> value.
+	 *
+	 * @param value
+	 *            the value to get a JSON representation for
+	 * @return a JSON value that represents the given value
+	 */
+	public static JsonValue valueOf(final boolean value) {
+		return value ? TRUE : FALSE;
+	}
+
+	/**
+	 * Returns a JsonValue instance that represents the given
+	 * <code>double</code> value.
+	 *
+	 * @param value
+	 *            the value to get a JSON representation for
+	 * @return a JSON value that represents the given value
+	 */
+	public static JsonValue valueOf(final double value) {
+		if (Double.isInfinite(value) || Double.isNaN(value)) {
+			throw new IllegalArgumentException(
+					"Infinite and NaN values not permitted in JSON");
 		}
+		return new JsonNumber(cutOffPointZero(Double.toString(value)));
+	}
+
+	/**
+	 * Returns a JsonValue instance that represents the given <code>float</code>
+	 * value.
+	 *
+	 * @param value
+	 *            the value to get a JSON representation for
+	 * @return a JSON value that represents the given value
+	 */
+	public static JsonValue valueOf(final float value) {
+		if (Float.isInfinite(value) || Float.isNaN(value)) {
+			throw new IllegalArgumentException(
+					"Infinite and NaN values not permitted in JSON");
+		}
+		return new JsonNumber(cutOffPointZero(Float.toString(value)));
 	}
 
 	/**
@@ -120,7 +155,7 @@ public abstract class JsonValue implements Serializable {
 	 *            the value to get a JSON representation for
 	 * @return a JSON value that represents the given value
 	 */
-	public static JsonValue valueOf(int value) {
+	public static JsonValue valueOf(final int value) {
 		return new JsonNumber(Integer.toString(value, 10));
 	}
 
@@ -132,40 +167,8 @@ public abstract class JsonValue implements Serializable {
 	 *            the value to get a JSON representation for
 	 * @return a JSON value that represents the given value
 	 */
-	public static JsonValue valueOf(long value) {
+	public static JsonValue valueOf(final long value) {
 		return new JsonNumber(Long.toString(value, 10));
-	}
-
-	/**
-	 * Returns a JsonValue instance that represents the given <code>float</code>
-	 * value.
-	 *
-	 * @param value
-	 *            the value to get a JSON representation for
-	 * @return a JSON value that represents the given value
-	 */
-	public static JsonValue valueOf(float value) {
-		if (Float.isInfinite(value) || Float.isNaN(value)) {
-			throw new IllegalArgumentException(
-					"Infinite and NaN values not permitted in JSON");
-		}
-		return new JsonNumber(cutOffPointZero(Float.toString(value)));
-	}
-
-	/**
-	 * Returns a JsonValue instance that represents the given
-	 * <code>double</code> value.
-	 *
-	 * @param value
-	 *            the value to get a JSON representation for
-	 * @return a JSON value that represents the given value
-	 */
-	public static JsonValue valueOf(double value) {
-		if (Double.isInfinite(value) || Double.isNaN(value)) {
-			throw new IllegalArgumentException(
-					"Infinite and NaN values not permitted in JSON");
-		}
-		return new JsonNumber(cutOffPointZero(Double.toString(value)));
 	}
 
 	/**
@@ -175,112 +178,19 @@ public abstract class JsonValue implements Serializable {
 	 *            the string to get a JSON representation for
 	 * @return a JSON value that represents the given string
 	 */
-	public static JsonValue valueOf(String string) {
+	public static JsonValue valueOf(final String string) {
 		return string == null ? NULL : new JsonString(string);
 	}
 
-	/**
-	 * Returns a JsonValue instance that represents the given
-	 * <code>boolean</code> value.
-	 *
-	 * @param value
-	 *            the value to get a JSON representation for
-	 * @return a JSON value that represents the given value
-	 */
-	public static JsonValue valueOf(boolean value) {
-		return value ? TRUE : FALSE;
+	private static String cutOffPointZero(final String string) {
+		if (string.endsWith(".0")) {
+			return string.substring(0, string.length() - 2);
+		}
+		return string;
 	}
 
-	/**
-	 * Detects whether this value represents a JSON object. If this is the case,
-	 * this value is an instance of {@link JsonObject}.
-	 *
-	 * @return <code>true</code> if this value is an instance of JsonObject
-	 */
-	public boolean isObject() {
-		return false;
-	}
-
-	/**
-	 * Detects whether this value represents a JSON array. If this is the case,
-	 * this value is an instance of {@link JsonArray}.
-	 *
-	 * @return <code>true</code> if this value is an instance of JsonArray
-	 */
-	public boolean isArray() {
-		return false;
-	}
-
-	/**
-	 * Detects whether this value represents a JSON number.
-	 *
-	 * @return <code>true</code> if this value represents a JSON number
-	 */
-	public boolean isNumber() {
-		return false;
-	}
-
-	/**
-	 * Detects whether this value represents a JSON string.
-	 *
-	 * @return <code>true</code> if this value represents a JSON string
-	 */
-	public boolean isString() {
-		return false;
-	}
-
-	/**
-	 * Detects whether this value represents a boolean value.
-	 *
-	 * @return <code>true</code> if this value represents either the JSON
-	 *         literal <code>true</code> or <code>false</code>
-	 */
-	public boolean isBoolean() {
-		return false;
-	}
-
-	/**
-	 * Detects whether this value represents the JSON literal <code>true</code>.
-	 *
-	 * @return <code>true</code> if this value represents the JSON literal
-	 *         <code>true</code>
-	 */
-	public boolean isTrue() {
-		return false;
-	}
-
-	/**
-	 * Detects whether this value represents the JSON literal
-	 * <code>false</code>.
-	 *
-	 * @return <code>true</code> if this value represents the JSON literal
-	 *         <code>false</code>
-	 */
-	public boolean isFalse() {
-		return false;
-	}
-
-	/**
-	 * Detects whether this value represents the JSON literal <code>null</code>.
-	 *
-	 * @return <code>true</code> if this value represents the JSON literal
-	 *         <code>null</code>
-	 */
-	public boolean isNull() {
-		return false;
-	}
-
-	/**
-	 * Returns this JSON value as {@link JsonObject}, assuming that this value
-	 * represents a JSON object. If this is not the case, an exception is
-	 * thrown.
-	 *
-	 * @return a JSONObject for this value
-	 * @throws UnsupportedOperationException
-	 *             if this value is not a JSON object
-	 */
-	public JsonObject asObject() {
-		throw new UnsupportedOperationException("Not an object: " + toString());
+	JsonValue() {
+		// prevent subclasses outside of this package
 	}
 
 	/**
@@ -293,6 +203,56 @@ public abstract class JsonValue implements Serializable {
 	 */
 	public JsonArray asArray() {
 		throw new UnsupportedOperationException("Not an array: " + toString());
+	}
+
+	/**
+	 * Returns this JSON value as a <code>boolean</code> value, assuming that
+	 * this value is either <code>true</code> or <code>false</code>. If this is
+	 * not the case, an exception is thrown.
+	 *
+	 * @return this value as <code>boolean</code>
+	 * @throws UnsupportedOperationException
+	 *             if this value is neither <code>true</code> or
+	 *             <code>false</code>
+	 */
+	public boolean asBoolean() {
+		throw new UnsupportedOperationException("Not a boolean: " + toString());
+	}
+
+	/**
+	 * Returns this JSON value as a <code>double</code> value, assuming that
+	 * this value represents a JSON number. If this is not the case, an
+	 * exception is thrown.
+	 * <p>
+	 * If the JSON number is out of the <code>Double</code> range,
+	 * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY} is
+	 * returned.
+	 * </p>
+	 *
+	 * @return this value as <code>double</code>
+	 * @throws UnsupportedOperationException
+	 *             if this value is not a JSON number
+	 */
+	public double asDouble() {
+		throw new UnsupportedOperationException("Not a number: " + toString());
+	}
+
+	/**
+	 * Returns this JSON value as a <code>float</code> value, assuming that this
+	 * value represents a JSON number. If this is not the case, an exception is
+	 * thrown.
+	 * <p>
+	 * If the JSON number is out of the <code>Float</code> range,
+	 * {@link Float#POSITIVE_INFINITY} or {@link Float#NEGATIVE_INFINITY} is
+	 * returned.
+	 * </p>
+	 *
+	 * @return this value as <code>float</code>
+	 * @throws UnsupportedOperationException
+	 *             if this value is not a JSON number
+	 */
+	public float asFloat() {
+		throw new UnsupportedOperationException("Not a number: " + toString());
 	}
 
 	/**
@@ -338,39 +298,16 @@ public abstract class JsonValue implements Serializable {
 	}
 
 	/**
-	 * Returns this JSON value as a <code>float</code> value, assuming that this
-	 * value represents a JSON number. If this is not the case, an exception is
+	 * Returns this JSON value as {@link JsonObject}, assuming that this value
+	 * represents a JSON object. If this is not the case, an exception is
 	 * thrown.
-	 * <p>
-	 * If the JSON number is out of the <code>Float</code> range,
-	 * {@link Float#POSITIVE_INFINITY} or {@link Float#NEGATIVE_INFINITY} is
-	 * returned.
-	 * </p>
 	 *
-	 * @return this value as <code>float</code>
+	 * @return a JSONObject for this value
 	 * @throws UnsupportedOperationException
-	 *             if this value is not a JSON number
+	 *             if this value is not a JSON object
 	 */
-	public float asFloat() {
-		throw new UnsupportedOperationException("Not a number: " + toString());
-	}
-
-	/**
-	 * Returns this JSON value as a <code>double</code> value, assuming that
-	 * this value represents a JSON number. If this is not the case, an
-	 * exception is thrown.
-	 * <p>
-	 * If the JSON number is out of the <code>Double</code> range,
-	 * {@link Double#POSITIVE_INFINITY} or {@link Double#NEGATIVE_INFINITY} is
-	 * returned.
-	 * </p>
-	 *
-	 * @return this value as <code>double</code>
-	 * @throws UnsupportedOperationException
-	 *             if this value is not a JSON number
-	 */
-	public double asDouble() {
-		throw new UnsupportedOperationException("Not a number: " + toString());
+	public JsonObject asObject() {
+		throw new UnsupportedOperationException("Not an object: " + toString());
 	}
 
 	/**
@@ -383,63 +320,6 @@ public abstract class JsonValue implements Serializable {
 	 */
 	public String asString() {
 		throw new UnsupportedOperationException("Not a string: " + toString());
-	}
-
-	/**
-	 * Returns this JSON value as a <code>boolean</code> value, assuming that
-	 * this value is either <code>true</code> or <code>false</code>. If this is
-	 * not the case, an exception is thrown.
-	 *
-	 * @return this value as <code>boolean</code>
-	 * @throws UnsupportedOperationException
-	 *             if this value is neither <code>true</code> or
-	 *             <code>false</code>
-	 */
-	public boolean asBoolean() {
-		throw new UnsupportedOperationException("Not a boolean: " + toString());
-	}
-
-	/**
-	 * Writes the JSON representation for this object to the given writer.
-	 * <p>
-	 * Single elements are passed directly to the given writer. Therefore, if
-	 * the writer is not buffered, wrapping it in a
-	 * {@link java.io.BufferedWriter BufferedWriter} can drastically improve
-	 * writing performance.
-	 * </p>
-	 *
-	 * @param writer
-	 *            the writer to write this value to
-	 * @throws IOException
-	 *             if an I/O error occurs in the writer
-	 */
-	public void writeTo(Writer writer) throws IOException {
-		write(new JsonWriter(writer));
-	}
-
-	public void writeTo(JsonWriter writer) throws IOException {
-		write(writer);
-	}
-
-	/**
-	 * Returns the JSON string for this value in its minimal form, without any
-	 * additional whitespace. The result is guaranteed to be a valid input for
-	 * the method {@link #readFrom(String)} and to create a value that is
-	 * <em>equal</em> to this object.
-	 *
-	 * @return a JSON string that represents this value
-	 */
-	@Override
-	public String toString() {
-		StringWriter stringWriter = new StringWriter();
-		JsonWriter jsonWriter = new JsonWriter(stringWriter);
-		try {
-			write(jsonWriter);
-		} catch (IOException exception) {
-			// StringWriter does not throw IOExceptions
-			throw new RuntimeException(exception);
-		}
-		return stringWriter.toString();
 	}
 
 	/**
@@ -458,7 +338,7 @@ public abstract class JsonValue implements Serializable {
 	 *         otherwise
 	 */
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(final Object object) {
 		return super.equals(object);
 	}
 
@@ -467,13 +347,128 @@ public abstract class JsonValue implements Serializable {
 		return super.hashCode();
 	}
 
-	protected abstract void write(JsonWriter writer) throws IOException;
-
-	private static String cutOffPointZero(String string) {
-		if (string.endsWith(".0")) {
-			return string.substring(0, string.length() - 2);
-		}
-		return string;
+	/**
+	 * Detects whether this value represents a JSON array. If this is the case,
+	 * this value is an instance of {@link JsonArray}.
+	 *
+	 * @return <code>true</code> if this value is an instance of JsonArray
+	 */
+	public boolean isArray() {
+		return false;
 	}
+
+	/**
+	 * Detects whether this value represents a boolean value.
+	 *
+	 * @return <code>true</code> if this value represents either the JSON
+	 *         literal <code>true</code> or <code>false</code>
+	 */
+	public boolean isBoolean() {
+		return false;
+	}
+
+	/**
+	 * Detects whether this value represents the JSON literal
+	 * <code>false</code>.
+	 *
+	 * @return <code>true</code> if this value represents the JSON literal
+	 *         <code>false</code>
+	 */
+	public boolean isFalse() {
+		return false;
+	}
+
+	/**
+	 * Detects whether this value represents the JSON literal <code>null</code>.
+	 *
+	 * @return <code>true</code> if this value represents the JSON literal
+	 *         <code>null</code>
+	 */
+	public boolean isNull() {
+		return false;
+	}
+
+	/**
+	 * Detects whether this value represents a JSON number.
+	 *
+	 * @return <code>true</code> if this value represents a JSON number
+	 */
+	public boolean isNumber() {
+		return false;
+	}
+
+	/**
+	 * Detects whether this value represents a JSON object. If this is the case,
+	 * this value is an instance of {@link JsonObject}.
+	 *
+	 * @return <code>true</code> if this value is an instance of JsonObject
+	 */
+	public boolean isObject() {
+		return false;
+	}
+
+	/**
+	 * Detects whether this value represents a JSON string.
+	 *
+	 * @return <code>true</code> if this value represents a JSON string
+	 */
+	public boolean isString() {
+		return false;
+	}
+
+	/**
+	 * Detects whether this value represents the JSON literal <code>true</code>.
+	 *
+	 * @return <code>true</code> if this value represents the JSON literal
+	 *         <code>true</code>
+	 */
+	public boolean isTrue() {
+		return false;
+	}
+
+	/**
+	 * Returns the JSON string for this value in its minimal form, without any
+	 * additional whitespace. The result is guaranteed to be a valid input for
+	 * the method {@link #readFrom(String)} and to create a value that is
+	 * <em>equal</em> to this object.
+	 *
+	 * @return a JSON string that represents this value
+	 */
+	@Override
+	public String toString() {
+		final StringWriter stringWriter = new StringWriter();
+		final JsonWriter jsonWriter = new JsonWriter(stringWriter);
+		try {
+			write(jsonWriter);
+		} catch (final IOException exception) {
+			// StringWriter does not throw IOExceptions
+			throw new RuntimeException(exception);
+		}
+		return stringWriter.toString();
+	}
+
+	public void writeTo(final JsonWriter writer) throws IOException {
+		write(writer);
+	}
+
+	/**
+	 * Writes the JSON representation for this object to the given writer.
+	 * <p>
+	 * Single elements are passed directly to the given writer. Therefore, if
+	 * the writer is not buffered, wrapping it in a
+	 * {@link java.io.BufferedWriter BufferedWriter} can drastically improve
+	 * writing performance.
+	 * </p>
+	 *
+	 * @param writer
+	 *            the writer to write this value to
+	 * @throws IOException
+	 *             if an I/O error occurs in the writer
+	 */
+	public void writeTo(final Writer writer) throws IOException {
+		write(new JsonWriter(writer));
+	}
+
+	protected abstract void write(JsonWriter writer) throws IOException;
 
 }

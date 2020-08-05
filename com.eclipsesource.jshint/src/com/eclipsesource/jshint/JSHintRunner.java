@@ -155,10 +155,8 @@ public class JSHintRunner {
 				setCharset(arg);
 			} else if (PARAM_CUSTOM_JSHINT.equalsIgnoreCase(lastArg)) {
 				setLibrary(arg);
-			} else if (PARAM_CHARSET.equalsIgnoreCase(arg)
-					|| PARAM_CUSTOM_JSHINT.equalsIgnoreCase(arg)) {
-				// continue
-			} else {
+			} else if (!PARAM_CHARSET.equalsIgnoreCase(arg)
+					&& !PARAM_CUSTOM_JSHINT.equalsIgnoreCase(arg)) {
 				final File file = new File(arg);
 				files.add(checkFile(file));
 			}

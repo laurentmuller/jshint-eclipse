@@ -10,8 +10,8 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences.ui;
 
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridData;
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridLayout;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridData;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridLayout;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;

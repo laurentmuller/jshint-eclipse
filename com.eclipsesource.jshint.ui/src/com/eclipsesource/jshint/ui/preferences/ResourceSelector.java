@@ -34,7 +34,7 @@ public class ResourceSelector {
 	private final List<PathPattern> excludePatterns;
 
 	public ResourceSelector(final IProject project) {
-		final Preferences preferenceNode = PreferencesFactory
+		final Preferences preferenceNode = PreferencesFactoryUtils
 				.getProjectPreferences(project);
 		final EnablementPreferences preferences = new EnablementPreferences(
 				preferenceNode);

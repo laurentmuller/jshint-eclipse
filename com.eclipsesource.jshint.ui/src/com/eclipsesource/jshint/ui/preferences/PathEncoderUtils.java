@@ -13,7 +13,7 @@ package com.eclipsesource.jshint.ui.preferences;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PathEncoder {
+public class PathEncoderUtils {
 
 	public static List<String> decodePaths(final String encodedPaths) {
 		final List<String> list = new ArrayList<>();
@@ -36,5 +36,12 @@ public class PathEncoder {
 			}
 		}
 		return builder.toString();
+	}
+
+	/*
+	 * prevent instance creation
+	 */
+	private PathEncoderUtils() {
+		throw new AssertionError("No PathEncoderUtils instances is allowed"); //$NON-NLS-1$
 	}
 }

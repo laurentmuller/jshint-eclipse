@@ -10,8 +10,8 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences.ui;
 
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridData;
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridLayout;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridData;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -136,7 +136,7 @@ public class IncludesView extends Composite {
 
 	private void configurePatternDialog(final PathPatternDialog dialog,
 			final Table table) {
-		if (table == excludeTable) {
+		if (excludeTable.equals(table)) {
 			dialog.setTitle("Select folders and files to exclude");
 		} else {
 			dialog.setTitle("Select folders and files to include");

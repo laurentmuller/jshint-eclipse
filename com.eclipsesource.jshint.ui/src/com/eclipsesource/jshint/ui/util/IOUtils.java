@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import com.eclipsesource.jshint.ui.Activator;
 
-public class IOUtil {
+public class IOUtils {
 
 	public static final String UTF_8 = "UTF-8";
 
@@ -100,4 +100,10 @@ public class IOUtil {
 		}
 	}
 
+	/*
+	 * prevent instance creation
+	 */
+	private IOUtils() {
+		throw new AssertionError("No IOUtils instances is allowed"); //$NON-NLS-1$
+	}
 }

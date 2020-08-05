@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Objects;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
@@ -142,12 +143,6 @@ public class JSHint {
 	private int indent = DEFAULT_JSHINT_INDENT;
 
 	/**
-	 * Creates a new instance.
-	 */
-	public JSHint() {
-	}
-
-	/**
 	 * Checks the given JavaScript code. All problems will be reported to the
 	 * given problem handler.
 	 *
@@ -159,19 +154,17 @@ public class JSHint {
 	 *         <code>false</code>
 	 */
 	public boolean check(final String code, final ProblemHandler handler) {
-		if (code == null) {
-			throw new NullPointerException("code is null");
-		}
+		Objects.requireNonNull(code, "The 'code' parameter is null.");
+
 		return check(new Text(code), handler);
 	}
 
 	public boolean check(final Text text, final ProblemHandler handler) {
-		if (text == null) {
-			throw new NullPointerException("code is null");
-		}
+		Objects.requireNonNull(text, "The 'text' parameter is null.");
 		if (jshint == null) {
 			throw new IllegalStateException("JSHint is not loaded");
 		}
+
 		boolean result = true;
 		final String code = text.getContent();
 		// Don't feed jshint with empty strings, see
@@ -280,43 +273,6 @@ public class JSHint {
 		return DEFAULT_JSHINT_INDENT;
 	}
 
-	// private void findOptions(final Context context,
-	// final ScriptableObject scope) {
-	//
-	// System.out.println(jshint.has("data", jshint));
-	// final Object o = jshint.get("data", jshint);
-	// System.out.println(o);
-	//
-	// final Object object = jshint.get("boolOptions", jshint);
-	// if (object instanceof Scriptable) {
-	// final Scriptable s = (Scriptable) object;
-	// final Object[] ids = s.getIds();
-	// for (final Object id : ids) {
-	// System.out.println(id);
-	// }
-	// System.out.println();
-	// }
-	// // if (object instanceof JsnObject) {
-	// // System.out.println(object);
-	// // }
-	// // JSObject rick =
-	// // rick.getMember("name")
-	// final Scriptable obj = (Scriptable) jshint.get("data", jshint);
-	// final Object dd = obj.get("options", obj);
-	// System.out.println(obj);
-	// System.out.println(dd);
-	//
-	// Object[] ids = jshint.getIds();
-	// for (final Object id : ids) {
-	// System.out.println(id);
-	// }
-	//
-	// ids = ScriptableObject.getPropertyIds(scope);
-	// for (final Object id : ids) {
-	// System.out.println(id);
-	// }
-	// }
-
 	private void handleProblems(final ProblemHandler handler, final Text text) {
 		final NativeArray errors = (NativeArray) jshint.get("errors", jshint);
 		final long length = errors.getLength();
@@ -348,36 +304,6 @@ public class JSHint {
 			Context.exit();
 		}
 	}
-
-	// private List<String> readBooleans(final NativeObject exports,
-	// final String key) {
-	// try {
-	// System.out.println(exports.get("bool"));
-	// final NativeObject bool = (NativeObject) exports.get("bool");
-	// final NativeObject map = (NativeObject) bool.get(key);
-	// return readMap(map);
-	// } catch (final Exception e) {
-	// return Collections.emptyList();
-	// }
-	// }
-
-	// private List<String> readMap(final NativeObject source) {
-	// final List<String> result = new ArrayList<>(source.size());
-	// for (final Object key : source.keySet()) {
-	// result.add(key.toString());
-	// }
-	// return result;
-	// }
-
-	// private List<String> readValues(final NativeObject exports,
-	// final String key) {
-	// try {
-	// final NativeObject map = (NativeObject) exports.get("val");
-	// return readMap(map);
-	// } catch (final Exception e) {
-	// return Collections.emptyList();
-	// }
-	// }
 
 	/**
 	 * See: http://jshint.com/docs/reporters/

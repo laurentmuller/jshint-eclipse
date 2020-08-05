@@ -31,7 +31,7 @@ public class EnablementPreferences {
 	}
 
 	public void setIncludePatterns(List<String> patterns) {
-		String value = PathEncoder.encodePaths(patterns);
+		String value = PathEncoderUtils.encodePaths(patterns);
 		if (!value.equals(node.get(KEY_INCLUDED, DEF_INCLUDED))) {
 			if (DEF_INCLUDED.equals(value)) {
 				node.remove(KEY_INCLUDED);
@@ -44,11 +44,11 @@ public class EnablementPreferences {
 
 	public List<String> getIncludePatterns() {
 		String value = node.get(KEY_INCLUDED, DEF_INCLUDED);
-		return PathEncoder.decodePaths(value);
+		return PathEncoderUtils.decodePaths(value);
 	}
 
 	public void setExcludePatterns(List<String> patterns) {
-		String value = PathEncoder.encodePaths(patterns);
+		String value = PathEncoderUtils.encodePaths(patterns);
 		if (!value.equals(node.get(KEY_EXCLUDED, DEF_EXCLUDED))) {
 			if (DEF_EXCLUDED.equals(value)) {
 				node.remove(KEY_EXCLUDED);
@@ -61,7 +61,7 @@ public class EnablementPreferences {
 
 	public List<String> getExcludePatterns() {
 		String value = node.get(KEY_EXCLUDED, DEF_EXCLUDED);
-		return PathEncoder.decodePaths(value);
+		return PathEncoderUtils.decodePaths(value);
 	}
 
 	public boolean hasChanged() {

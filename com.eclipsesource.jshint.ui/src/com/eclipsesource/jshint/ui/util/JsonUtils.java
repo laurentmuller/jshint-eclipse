@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Objects;
 
-import com.eclipsesource.jshint.ui.builder.CommentsFilter;
+import com.eclipsesource.jshint.ui.builder.CommentsFilterUtils;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.PrettyPrintJsonWriter;
 
-public class JsonUtil {
+public class JsonUtils {
 
 	public static boolean jsonEquals(final String str1, final String str2) {
 		if (Objects.equals(str1, str2)) {
@@ -35,24 +35,25 @@ public class JsonUtil {
 		return false;
 	}
 
-	public static String prettyPrint(final JsonObject obj)
-			throws RuntimeException {
-		try {
-			final StringWriter writer = new StringWriter();
-			obj.writeTo(new PrettyPrintJsonWriter(writer));
-			return writer.toString();
-
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
-		}
+	public static String prettyPrint(final JsonObject obj) throws IOException {
+		final StringWriter writer = new StringWriter();
+		obj.writeTo(new PrettyPrintJsonWriter(writer));
+		return writer.toString();
 	}
 
-	public static String prettyPrint(final String str) throws RuntimeException {
+	public static String prettyPrint(final String str) throws IOException {
 		final JsonObject obj = readFrom(str);
 		return prettyPrint(obj);
 	}
 
-	public static JsonObject readFrom(final String str) {
-		return JsonObject.readFrom(CommentsFilter.filter(str));
+	public static JsonObject readFrom(final String str) throws IOException {
+		return JsonObject.readFrom(CommentsFilterUtils.filter(str));
+	}
+
+	/*
+	 * prevent instance creation
+	 */
+	private JsonUtils() {
+		throw new AssertionError("No JsonUtils instances is allowed"); //$NON-NLS-1$
 	}
 }

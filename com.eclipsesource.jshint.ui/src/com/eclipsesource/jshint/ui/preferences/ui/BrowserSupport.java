@@ -12,6 +12,7 @@ package com.eclipsesource.jshint.ui.preferences.ui;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -42,25 +43,13 @@ public class BrowserSupport {
 		selectionListener = createSelectionListener();
 	}
 
-	private Listener createSelectionListener() {
-		return new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				if (isSupportedUrl(event.text)) {
-					openUrl(event.text);
-				}
-			}
-		};
-	}
-
 	public void enableHyperlinks(final Link link) {
 		link.addListener(SWT.Selection, selectionListener);
 	}
 
 	public void openUrl(final String url) {
-		if (url == null) {
-			throw new NullPointerException("url is null");
-		}
+		Objects.requireNonNull(url, "The 'url' parameter is null.");
+
 		final IWorkbenchBrowserSupport support = PlatformUI.getWorkbench()
 				.getBrowserSupport();
 		try {
@@ -73,6 +62,17 @@ public class BrowserSupport {
 			StatusManager.getManager().handle(exception.getStatus(),
 					StatusManager.LOG);
 		}
+	}
+
+	private Listener createSelectionListener() {
+		return new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
+				if (isSupportedUrl(event.text)) {
+					openUrl(event.text);
+				}
+			}
+		};
 	}
 
 }

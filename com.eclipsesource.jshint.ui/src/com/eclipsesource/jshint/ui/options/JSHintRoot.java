@@ -49,22 +49,6 @@ public final class JSHintRoot implements Iterable<JSHintGroup> {
 		return instance;
 	}
 
-	public static void main(final String[] args) {
-		final JSHintRoot root = JSHintRoot.getInstance();
-		for (final JSHintGroup group : root) {
-			System.out.println("---------------------------------");
-			System.out.println(group);
-			System.out.println("---------------------------------");
-			for (final JSHintOption option : group) {
-				System.out.println(option);
-			}
-		}
-		System.out.println("---------------------------------");
-		System.out.println(root);
-		System.out.println("---------------------------------");
-		System.exit(0);
-	}
-
 	/**
 	 * Gets the reader for the java script options.
 	 */

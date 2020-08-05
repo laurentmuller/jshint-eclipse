@@ -10,8 +10,8 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences.ui;
 
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridData;
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridLayout;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridData;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridLayout;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Control;
 import org.osgi.service.prefs.Preferences;
 
 import com.eclipsesource.jshint.ui.Activator;
-import com.eclipsesource.jshint.ui.builder.BuilderUtil;
+import com.eclipsesource.jshint.ui.builder.BuilderUtils;
 import com.eclipsesource.jshint.ui.builder.JSHintBuilder;
 import com.eclipsesource.jshint.ui.preferences.EnablementPreferences;
 import com.eclipsesource.jshint.ui.preferences.ResourceSelector;
@@ -87,14 +87,14 @@ public class ProjectPropertyPage extends AbstractPropertyPage {
 	private boolean setBuilderEnabled(boolean enabled) throws CoreException {
 		IProject project = getResource().getProject();
 		if (enabled) {
-			return BuilderUtil.addBuilderToProject(project, JSHintBuilder.ID);
+			return BuilderUtils.addBuilderToProject(project, JSHintBuilder.ID);
 		}
-		return BuilderUtil.removeBuilderFromProject(project, JSHintBuilder.ID);
+		return BuilderUtils.removeBuilderFromProject(project, JSHintBuilder.ID);
 	}
 
 	private void triggerRebuild() throws CoreException {
 		IProject project = getResource().getProject();
-		BuilderUtil.triggerClean(project, JSHintBuilder.ID);
+		BuilderUtils.triggerClean(project, JSHintBuilder.ID);
 	}
 
 }

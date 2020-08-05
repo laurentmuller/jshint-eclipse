@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.builder;
 
-import static com.eclipsesource.jshint.ui.util.IOUtil.readUtf8File;
+import static com.eclipsesource.jshint.ui.util.IOUtils.readUtf8File;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -19,8 +19,8 @@ import org.osgi.service.prefs.Preferences;
 
 import com.eclipsesource.jshint.ui.Activator;
 import com.eclipsesource.jshint.ui.preferences.OptionsPreferences;
-import com.eclipsesource.jshint.ui.preferences.PreferencesFactory;
-import com.eclipsesource.jshint.ui.util.JsonUtil;
+import com.eclipsesource.jshint.ui.preferences.PreferencesFactoryUtils;
+import com.eclipsesource.jshint.ui.util.JsonUtils;
 import com.eclipsesource.json.JsonObject;
 
 public class ConfigurationLoader {
@@ -28,7 +28,7 @@ public class ConfigurationLoader {
 	private static JsonObject getWorkspaceConfig() {
 		try {
 			final String json = getWorkspaceConfigJson();
-			return JsonUtil.readFrom(json);
+			return JsonUtils.readFrom(json);
 
 		} catch (final Exception e) {
 			final String msg = "Failed to read jshint configuration from workspace preferences.";
@@ -38,7 +38,7 @@ public class ConfigurationLoader {
 	}
 
 	private static String getWorkspaceConfigJson() {
-		final Preferences workspaceNode = PreferencesFactory
+		final Preferences workspaceNode = PreferencesFactoryUtils
 				.getWorkspacePreferences();
 		return new OptionsPreferences(workspaceNode).getConfig();
 	}
@@ -50,7 +50,7 @@ public class ConfigurationLoader {
 	}
 
 	public JsonObject getConfiguration() {
-		final Preferences projectNode = PreferencesFactory
+		final Preferences projectNode = PreferencesFactoryUtils
 				.getProjectPreferences(project);
 		final OptionsPreferences projectPreferences = new OptionsPreferences(
 				projectNode);
@@ -63,7 +63,7 @@ public class ConfigurationLoader {
 	private JsonObject getProjectConfig(final OptionsPreferences projectPrefs) {
 		try {
 			final String json = getProjectConfigJson(projectPrefs);
-			return JsonUtil.readFrom(json);
+			return JsonUtils.readFrom(json);
 
 		} catch (final Exception e) {
 			final String msg = String.format(

@@ -10,8 +10,8 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences.ui;
 
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridData;
-import static com.eclipsesource.jshint.ui.util.LayoutUtil.gridLayout;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridData;
+import static com.eclipsesource.jshint.ui.util.LayoutUtils.gridLayout;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +41,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.eclipsesource.jshint.JSHint;
 import com.eclipsesource.jshint.ui.Activator;
-import com.eclipsesource.jshint.ui.builder.BuilderUtil;
+import com.eclipsesource.jshint.ui.builder.BuilderUtils;
 import com.eclipsesource.jshint.ui.builder.JSHintBuilder;
 import com.eclipsesource.jshint.ui.preferences.JSHintPreferences;
 
@@ -206,7 +206,7 @@ public class JSHintPreferencePage extends PreferencePage
 				.getProjects();
 		for (final IProject project : projects) {
 			if (project.isAccessible()) {
-				BuilderUtil.triggerClean(project, JSHintBuilder.ID);
+				BuilderUtils.triggerClean(project, JSHintBuilder.ID);
 			}
 		}
 	}

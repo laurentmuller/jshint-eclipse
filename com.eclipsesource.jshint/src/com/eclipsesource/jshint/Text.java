@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Wrapper class for the text, used to read the content of a text file and to
@@ -30,17 +31,12 @@ public class Text {
 	private int[] lineOffsets = new int[200];
 
 	public Text(final Reader reader) throws IOException {
-		if (reader == null) {
-			throw new NullPointerException("The reader is null.");
-		}
+		Objects.requireNonNull(reader, "The 'reader' parameter is null.");
 		read(reader);
 	}
 
 	public Text(final String text) {
-		if (text == null) {
-			throw new NullPointerException("The text is null.");
-		}
-
+		Objects.requireNonNull(text, "The 'text' parameter is null.");
 		try (StringReader reader = new StringReader(text)) {
 			read(reader);
 		} catch (final IOException e) {
