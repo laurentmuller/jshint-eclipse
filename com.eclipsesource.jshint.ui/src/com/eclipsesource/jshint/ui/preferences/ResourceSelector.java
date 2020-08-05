@@ -71,10 +71,9 @@ public class ResourceSelector {
 	private boolean isFileIncluded(final String[] parentSegments,
 			final String fileName) {
 		for (final PathPattern pattern : includePatterns) {
-			if (pattern.matchesFolder(parentSegments)) {
-				if (pattern.matchesFile(fileName)) {
-					return true;
-				}
+			if (pattern.matchesFolder(parentSegments)
+					&& pattern.matchesFile(fileName)) {
+				return true;
 			}
 		}
 		return false;

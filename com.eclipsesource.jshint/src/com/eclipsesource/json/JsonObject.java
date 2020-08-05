@@ -743,6 +743,14 @@ public class JsonObject extends JsonValue implements Iterable<Member> {
 		writer.writeObject(this);
 	}
 
+	private int indexOf(final String name) {
+		final int index = table.get(name);
+		if (index != -1 && name.equals(names.get(index))) {
+			return index;
+		}
+		return names.lastIndexOf(name);
+	}
+
 	private synchronized void readObject(final ObjectInputStream inputStream)
 			throws IOException, ClassNotFoundException {
 		inputStream.defaultReadObject();
@@ -755,14 +763,6 @@ public class JsonObject extends JsonValue implements Iterable<Member> {
 		for (int i = 0; i < size; i++) {
 			table.add(names.get(i), i);
 		}
-	}
-
-	int indexOf(final String name) {
-		final int index = table.get(name);
-		if (index != -1 && name.equals(names.get(index))) {
-			return index;
-		}
-		return names.lastIndexOf(name);
 	}
 
 }
