@@ -1,0 +1,30 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.footer {
+  bottom: 0;
+  width: 100%;
+  font-size: 0.8rem;
+  padding: 3px 10px;
+  position: absolute;
+  background-color: var(--gray);
+}
+
+.footer a {
+  color: var(--white);
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.btn-form {
+  min-width: 130px;
+}

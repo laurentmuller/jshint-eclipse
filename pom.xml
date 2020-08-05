@@ -3,23 +3,52 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<properties>
-		<tycho-version>1.6.0</tycho-version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<eclipse.repo>http://download.eclipse.org/releases/latest</eclipse.repo>
-		<orbit.repo>https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository</orbit.repo>
-	</properties>
-
-	<prerequisites>
-		<maven>3.0</maven>
-	</prerequisites>
-
 	<name>jshint-eclipse</name>
-
 	<groupId>com.eclipsesource.jshint</groupId>
 	<artifactId>com.eclipsesource.jshint.build</artifactId>
 	<version>2.12.0</version>
 	<packaging>pom</packaging>
+
+	<properties>
+		<!--  global properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- maven properties -->
+		<maven.descriptor>false</maven.descriptor>
+		<maven.deploy.skip>true</maven.deploy.skip>		
+		<final.name>${project.artifactId}_${unqualifiedVersion}${buildQualifier}</final.name>
+		
+		<!-- plugin versions -->
+		<tycho-version>1.6.0</tycho-version>
+		<wagon-version>3.3.4</wagon-version>
+
+		<!-- repositories -->
+		<eclipse.repo>http://download.eclipse.org/releases/latest</eclipse.repo>
+		<orbit.repo>https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository</orbit.repo>		
+				
+		<!-- FTP properties -->
+		<ftp.serverId>infomaniak</ftp.serverId>
+		<ftp.url>ftp://tj8om.ftp.infomaniak.com/web</ftp.url>
+		<ftp.from>${project.basedir}/com.eclipsesource.jshint.repository/target/repository</ftp.from>
+		<ftp.to>jshint-eclipse/v${project.version}</ftp.to>
+		
+		<!-- developer -->
+		<developer.name>Laurent Muller</developer.name>
+		<developer.email>bibi@bibi.nu</developer.email>		
+	</properties>
+	
+	<developers>
+		<developer>
+			<id>bibi</id>
+			<name>${developer.name}</name>
+			<email>${developer.email}</email>
+			<url>https://www.bibi.nu</url>
+			<roles>
+				<role>architect</role>
+        		<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
 
 	<modules>
 		<module>com.eclipsesource.jshint</module>
@@ -43,10 +72,32 @@
 	</repositories>
 
 	<build>
-		<plugins>
-
+			<!-- used to deploy update site -->
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>${wagon-version}</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>${wagon-version}</version>
+			</extension>
+		</extensions>
+		
+		<plugins>		
+			<!-- skip local artifacts install -->
 			<plugin>
-				<!-- Enable Tycho -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>3.0.0-M1</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		
+			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
@@ -55,11 +106,51 @@
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-compiler-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<useProjectSettings>false</useProjectSettings>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<configuration>
-					<finalName>yyyyMMdd-HHmm</finalName>
+					<finalName>${final.name}</finalName>
+					<archive>
+						<addMavenDescriptor>${maven.descriptor}</addMavenDescriptor>
+					</archive>
 				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<finalName>${final.name}</finalName>
+					<additionalFileSets>
+						<additionalFileSet>
+							<directory>${basedir}</directory>
+							<includes>
+								<include>LICENSE</include>
+							</includes>
+						</additionalFileSet>
+					</additionalFileSets>
+					<archive>
+						<addMavenDescriptor>${maven.descriptor}</addMavenDescriptor>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			
 			<plugin>
@@ -77,7 +168,27 @@
 				</configuration>
 			</plugin>
 			
+			<!-- deploy to update site -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>wagon-maven-plugin</artifactId>
+				<version>2.0.0</version>
+				<executions>
+					<execution>
+						<id>upload</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>upload</goal>
+						</goals>
+						<configuration>
+							<serverId>${ftp.serverId}</serverId>
+							<url>${ftp.url}</url>
+							<fromDir>${ftp.from}</fromDir>
+							<toDir>${ftp.to}</toDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>			
 		</plugins>
 	</build>
-
 </project>

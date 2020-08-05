@@ -1,0 +1,3 @@
+<IfModule mod_headers.c>
+    Header set Content-Security-Policy "object-src 'none'; script-src 'self' 'unsafe-inline' *.bibi.nu; font-src 'self' *.bibi.nu; base-uri 'self' *.bibi.nu;"
+</IfModule>
