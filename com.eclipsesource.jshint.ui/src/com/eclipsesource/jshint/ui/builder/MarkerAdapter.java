@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.builder;
 
+import java.util.Objects;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -40,9 +42,7 @@ public class MarkerAdapter {
 
 	private void createMarker(final int line, final int start, final int end,
 			final String message, final int severity) throws CoreException {
-		if (message == null) {
-			throw new NullPointerException("The marker's message is null");
-		}
+		Objects.requireNonNull(message, "The 'message' parameter is null.");
 		final IMarker marker = resource.createMarker(TYPE_PROBLEM);
 		marker.setAttribute(IMarker.SEVERITY, severity);
 		marker.setAttribute(IMarker.MESSAGE, message);

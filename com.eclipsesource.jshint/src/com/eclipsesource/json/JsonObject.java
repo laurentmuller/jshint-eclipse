@@ -245,9 +245,7 @@ public class JsonObject extends JsonValue implements Iterable<Member> {
 	}
 
 	private JsonObject(final JsonObject object, final boolean unmodifiable) {
-		if (object == null) {
-			throw new NullPointerException("object is null");
-		}
+		Objects.requireNonNull(object, "The 'object' parameter is null.");
 		if (unmodifiable) {
 			names = Collections.unmodifiableList(object.names);
 			values = Collections.unmodifiableList(object.values);
@@ -463,9 +461,7 @@ public class JsonObject extends JsonValue implements Iterable<Member> {
 	 *         that name
 	 */
 	public JsonValue get(final String name) {
-		if (name == null) {
-			throw new NullPointerException("name is null");
-		}
+		Objects.requireNonNull(name, "The 'name' parameter is null.");
 		final int index = indexOf(name);
 		return index != -1 ? values.get(index) : null;
 	}
@@ -547,9 +543,7 @@ public class JsonObject extends JsonValue implements Iterable<Member> {
 	 * @return the object itself, to enable method chaining
 	 */
 	public JsonObject remove(final String name) {
-		if (name == null) {
-			throw new NullPointerException("name is null");
-		}
+		Objects.requireNonNull(name, "The 'name' parameter is null.");
 		final int index = indexOf(name);
 		if (index != -1) {
 			table.remove(index);
@@ -674,12 +668,8 @@ public class JsonObject extends JsonValue implements Iterable<Member> {
 	 * @return the object itself, to enable method chaining
 	 */
 	public JsonObject set(final String name, final JsonValue value) {
-		if (name == null) {
-			throw new NullPointerException("name is null");
-		}
-		if (value == null) {
-			throw new NullPointerException("value is null");
-		}
+		Objects.requireNonNull(name, "The 'name' parameter is null.");
+		Objects.requireNonNull(value, "The 'value' parameter is null.");
 		final int index = indexOf(name);
 		if (index != -1) {
 			values.set(index, value);

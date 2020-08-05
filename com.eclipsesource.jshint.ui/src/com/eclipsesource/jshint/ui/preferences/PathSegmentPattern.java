@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences;
 
+import java.util.Objects;
+
 public class PathSegmentPattern {
 
 	private static class Matcher {
@@ -61,9 +63,8 @@ public class PathSegmentPattern {
 			"");
 
 	public static PathSegmentPattern create(final String expression) {
-		if (expression == null) {
-			throw new NullPointerException("parameter is null");
-		}
+		Objects.requireNonNull(expression,
+				"The 'expression' parameter is null.");
 		if ("".equals(expression)) {
 			return NONE;
 		}

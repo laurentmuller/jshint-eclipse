@@ -381,9 +381,7 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	 *             <code>index >= size</code>
 	 */
 	public JsonArray set(final int index, final JsonValue value) {
-		if (value == null) {
-			throw new NullPointerException("value is null");
-		}
+		Objects.requireNonNull(value, "The 'value' parameter is null.");
 		values.set(index, value);
 		return this;
 	}

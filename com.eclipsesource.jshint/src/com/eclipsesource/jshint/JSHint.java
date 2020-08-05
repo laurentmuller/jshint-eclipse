@@ -19,7 +19,6 @@ import java.util.Objects;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
-import org.mozilla.javascript.JavaScriptException;
 import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.ScriptableObject;
@@ -155,7 +154,6 @@ public class JSHint {
 	 */
 	public boolean check(final String code, final ProblemHandler handler) {
 		Objects.requireNonNull(code, "The 'code' parameter is null.");
-
 		return check(new Text(code), handler);
 	}
 
@@ -197,9 +195,8 @@ public class JSHint {
 	 *            the configuration to use, must not be null
 	 */
 	public void configure(final JsonObject configuration) {
-		if (configuration == null) {
-			throw new NullPointerException("configuration is null");
-		}
+		Objects.requireNonNull(configuration,
+				"The 'configuration' parameter is null.");
 		final Context context = Context.enter();
 		try {
 			final ScriptableObject scope = context.initStandardObjects();
@@ -254,12 +251,8 @@ public class JSHint {
 			final Object[] args = new Object[] { code, options, globals };
 			return ((Boolean) jshint.call(context, scope, null, args))
 					.booleanValue();
-		} catch (final JavaScriptException e) {
-			final String message = "JavaScript exception thrown by JSHint: "
-					+ e.getMessage();
-			throw new RuntimeException(message, e);
 		} catch (final RhinoException e) {
-			final String message = "JavaScript exception caused by JSHint: "
+			final String message = "JavaScript exception thrown by JSHint: "
 					+ e.getMessage();
 			throw new RuntimeException(message, e);
 		}

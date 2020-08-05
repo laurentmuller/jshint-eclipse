@@ -442,7 +442,6 @@ public abstract class JsonValue implements Serializable {
 			write(jsonWriter);
 		} catch (final IOException exception) {
 			// StringWriter does not throw IOExceptions
-			throw new RuntimeException(exception);
 		}
 		return stringWriter.toString();
 	}
