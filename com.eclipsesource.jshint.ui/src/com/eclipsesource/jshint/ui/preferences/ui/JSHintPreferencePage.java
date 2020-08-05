@@ -86,6 +86,7 @@ public class JSHintPreferencePage extends PreferencePage
 
 	@Override
 	public void init(final IWorkbench workbench) {
+		// ignore
 	}
 
 	@Override

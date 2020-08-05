@@ -254,8 +254,44 @@ public class JSHint {
 		} catch (final RhinoException e) {
 			final String message = "JavaScript exception thrown by JSHint: "
 					+ e.getMessage();
-			throw new RuntimeException(message, e);
+			throw new JSHIntException(message, e);
 		}
+	}
+
+	/**
+	 * See: http://jshint.com/docs/reporters/
+	 *
+	 * <pre>
+	 * {
+	 *      file:  [string, filename]
+	 *      error: {
+	 *              id:        [string, usually '(error)'],
+	 *              code:      [string, error/warning code],
+	 *              reason:    [string, error/warning message],
+	 *              evidence:  [string, a piece of code that generated this error]
+	 *              line:      [number]
+	 *              character: [number]
+	 *              scope:     [string, message scope; usually '(main)' unless the code was eval'ed]
+	 *              [+ a few other legacy fields that you don't need to worry about.]
+	 *      }
+	 * }
+	 * </pre>
+	 */
+	private IProblem createProblem(final ScriptableObject error,
+			final Text text) {
+		final String reason = getPropertyAsString(error, "reason", "");
+		int line = getPropertyAsInt(error, "line", -1);
+		int character = getPropertyAsInt(error, "character", -1);
+		final String code = getPropertyAsString(error, "code", "");
+
+		if (line <= 0 || line > text.getLineCount()) {
+			line = -1;
+			character = -1;
+		} else if (character > 0) {
+			character = visualToCharIndex(text, line, character);
+		}
+
+		return new Problem(line, character, reason, code);
 	}
 
 	private int determineIndent(final JsonObject configuration) {
@@ -299,41 +335,6 @@ public class JSHint {
 	}
 
 	/**
-	 * See: http://jshint.com/docs/reporters/
-	 *
-	 * <pre>
-	 * {
-	 *      file:  [string, filename]
-	 *      error: {
-	 *              id:        [string, usually '(error)'],
-	 *              code:      [string, error/warning code],
-	 *              reason:    [string, error/warning message],
-	 *              evidence:  [string, a piece of code that generated this error]
-	 *              line:      [number]
-	 *              character: [number]
-	 *              scope:     [string, message scope; usually '(main)' unless the code was eval'ed]
-	 *              [+ a few other legacy fields that you don't need to worry about.]
-	 *      }
-	 * }
-	 * </pre>
-	 */
-	IProblem createProblem(final ScriptableObject error, final Text text) {
-		final String reason = getPropertyAsString(error, "reason", "");
-		int line = getPropertyAsInt(error, "line", -1);
-		int character = getPropertyAsInt(error, "character", -1);
-		final String code = getPropertyAsString(error, "code", "");
-
-		if (line <= 0 || line > text.getLineCount()) {
-			line = -1;
-			character = -1;
-		} else if (character > 0) {
-			character = visualToCharIndex(text, line, character);
-		}
-
-		return new Problem(line, character, reason, code);
-	}
-
-	/**
 	 * JSHint reports "visual" character positions instead of a character index,
 	 * i.e. the first character is 1 and every tab character is multiplied by
 	 * the indent with. Example with tabulation as 4 spaces:
@@ -349,7 +350,7 @@ public class JSHint {
 	 * </code>
 	 * </p>
 	 */
-	int visualToCharIndex(final Text text, final int line,
+	private int visualToCharIndex(final Text text, final int line,
 			final int character) {
 		boolean isTab;
 		int charIndex = 0;

@@ -130,11 +130,7 @@ public class JsonObject extends JsonValue implements Iterable<Member> {
 					hashTable.length);
 		}
 
-		private int hashSlotFor(final Object element) {
-			return element.hashCode() & hashTable.length - 1;
-		}
-
-		void add(final String name, final int index) {
+		private void add(final String name, final int index) {
 			final int slot = hashSlotFor(name);
 			if (index < 0xff) {
 				// increment by 1, 0 stands for empty
@@ -144,13 +140,17 @@ public class JsonObject extends JsonValue implements Iterable<Member> {
 			}
 		}
 
-		int get(final Object name) {
+		private int get(final Object name) {
 			final int slot = hashSlotFor(name);
 			// subtract 1, 0 stands for empty
 			return (hashTable[slot] & 0xff) - 1;
 		}
 
-		void remove(final int index) {
+		private int hashSlotFor(final Object element) {
+			return element.hashCode() & hashTable.length - 1;
+		}
+
+		private void remove(final int index) {
 			for (int i = 0; i < hashTable.length; i++) {
 				if (hashTable[i] == index + 1) {
 					hashTable[i] = 0;

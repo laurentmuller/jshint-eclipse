@@ -116,6 +116,36 @@ public class PathPatternDialog extends TitleAreaDialog {
 		super.setTitle(title);
 	}
 
+	@Override
+	protected void configureShell(final Shell shell) {
+		super.configureShell(shell);
+		shell.setText(
+				pattern != null ? "Edit path pattern" : "New path pattern");
+	}
+
+	@Override
+	protected Control createDialogArea(final Composite parent) {
+		final Control composite = super.createDialogArea(parent);
+		final Composite contentArea = new Composite(parent, SWT.NONE);
+		gridLayout(contentArea).margin(10).spacing(10);
+		gridData(contentArea).fillBoth();
+
+		final Control folderArea = createFolderArea(contentArea);
+		gridData(folderArea).fillBoth();
+
+		final Control fileArea = createFileArea(contentArea);
+		gridData(fileArea).fillBoth();
+
+		initializeUI();
+		return composite;
+	}
+
+	@Override
+	protected void okPressed() {
+		createPatternFromUI();
+		super.okPressed();
+	}
+
 	private void addFileRadioListeners() {
 		final Listener listener = new Listener() {
 			@Override
@@ -358,39 +388,5 @@ public class PathPatternDialog extends TitleAreaDialog {
 	private void validate() {
 		final String errorMessage = getCombinedErrorMessage();
 		setErrorMessage(errorMessage);
-	}
-
-	@Override
-	protected void configureShell(final Shell shell) {
-		super.configureShell(shell);
-		shell.setText(
-				pattern != null ? "Edit path pattern" : "New path pattern");
-	}
-
-	@Override
-	protected Control createDialogArea(final Composite parent) {
-		final Control composite = super.createDialogArea(parent);
-		final Composite contentArea = new Composite(parent, SWT.NONE);
-		gridLayout(contentArea).margin(10).spacing(10);
-		gridData(contentArea).fillBoth();
-
-		final Control folderArea = createFolderArea(contentArea);
-		gridData(folderArea).fillBoth();
-
-		final Control fileArea = createFileArea(contentArea);
-		gridData(fileArea).fillBoth();
-
-		initializeUI();
-		return composite;
-	}
-
-	@Override
-	protected void okPressed() {
-		createPatternFromUI();
-		super.okPressed();
-	}
-
-	String getTitle() {
-		return title;
 	}
 }

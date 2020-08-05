@@ -19,7 +19,7 @@ import com.eclipsesource.json.JsonValue;
 
 public class OptionParserUtils {
 
-	static class Entry {
+	private static final class Entry {
 		public final String name;
 		public final JsonValue value;
 
@@ -56,14 +56,14 @@ public class OptionParserUtils {
 					result.add(new Entry(key, value));
 				} else {
 					throw new IOException(
-							"The 'parts' length must contains 2 elements.");
+							"The 'parts' must contains 2 elements.");
 				}
 			}
 		}
 		return element;
 	}
 
-	static List<Entry> parseOptionString(final String input)
+	private static List<Entry> parseOptionString(final String input)
 			throws IOException {
 		final List<Entry> result = new ArrayList<>();
 		final String[] elements = input.split(",");
