@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2013 EclipseSource and others.
+ * Copyright (c) 2012, 2013 EclipseSource.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,45 +10,43 @@
  ******************************************************************************/
 package com.eclipsesource.jshint;
 
-/**
- * Holds information about a problem found by JSHint.
- */
-public interface Problem {
+public class Problem implements IProblem {
 
-	/**
-	 * Returns the line number in which the problem occurred.
-	 *
-	 * @return the line number, beginning with 1
-	 */
-	int getLine();
+	private final int line;
+	private final int character;
+	private final String message;
+	private final String code;
 
-	/**
-	 * Returns the character offset within the line in which the character
-	 * occurred.
-	 *
-	 * @return the character offset, beginning with 0
-	 */
-	int getCharacter();
+	public Problem(final int line, final int character,
+			final String message, final String code) {
+		this.line = line;
+		this.character = character;
+		this.message = message;
+		this.code = code;
+	}
 
-	/**
-	 * The problem message returned by JSHint.
-	 *
-	 * @return the message
-	 */
-	String getMessage();
+	@Override
+	public int getCharacter() {
+		return character;
+	}
 
-	/**
-	 * The error code returned by JSHint.
-	 *
-	 * @return the error code
-	 */
-	String getCode();
+	@Override
+	public String getCode() {
+		return code;
+	}
 
-	/**
-	 * Returns whether this problem represents an error.
-	 *
-	 * @return <code>true</code> if this is an error
-	 */
-	boolean isError();
+	@Override
+	public int getLine() {
+		return line;
+	}
 
+	@Override
+	public String getMessage() {
+		return message;
+	}
+
+	@Override
+	public boolean isError() {
+		return code != null && !code.isEmpty() && code.charAt(0) == 'E';
+	}
 }

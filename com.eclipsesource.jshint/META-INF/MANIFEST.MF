@@ -12,3 +12,4 @@ Export-Package: com.eclipsesource.jshint;uses:="org.mozilla.javascript,com.eclip
  com.eclipsesource.json,
  com.jshint
 Require-Bundle: org.mozilla.javascript
+Main-class: com.eclipsesource.jshint.JSHint

@@ -91,7 +91,7 @@ public class JSHintPreferencePage extends PreferencePage
 	@Override
 	public boolean performOk() {
 		try {
-			if (preferences.hasChanged()) {
+			if (preferences.isDirty()) {
 				preferences.save();
 				triggerRebuild();
 			}
@@ -218,10 +218,10 @@ public class JSHintPreferencePage extends PreferencePage
 	}
 
 	private void updateControlsFromPrefs() {
-		customLibRadio.setSelection(preferences.getUseCustomLib());
+		customLibRadio.setSelection(preferences.isUseCustomLib());
 		defaultLibRadio.setSelection(!customLibRadio.getSelection());
 		customLibPathText.setText(preferences.getCustomLibPath());
-		enableErrorsCheckbox.setSelection(preferences.getEnableErrorMarkers());
+		enableErrorsCheckbox.setSelection(preferences.isEnableErrorMarkers());
 	}
 
 	private void validate() {
@@ -257,7 +257,7 @@ public class JSHintPreferencePage extends PreferencePage
 	}
 
 	private void validatePrefs() {
-		if (preferences.getUseCustomLib()) {
+		if (preferences.isUseCustomLib()) {
 			final String path = preferences.getCustomLibPath();
 			validateFile(new File(path));
 		}

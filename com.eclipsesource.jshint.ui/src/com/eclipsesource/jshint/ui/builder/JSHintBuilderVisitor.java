@@ -31,7 +31,6 @@ import org.osgi.service.prefs.Preferences;
 import com.eclipsesource.jshint.JSHint;
 import com.eclipsesource.jshint.Text;
 import com.eclipsesource.jshint.ui.Activator;
-import com.eclipsesource.jshint.ui.builder.JSHintBuilder.CoreExceptionWrapper;
 import com.eclipsesource.jshint.ui.preferences.EnablementPreferences;
 import com.eclipsesource.jshint.ui.preferences.JSHintPreferences;
 import com.eclipsesource.jshint.ui.preferences.PreferencesFactoryUtils;
@@ -45,7 +44,7 @@ class JSHintBuilderVisitor implements IResourceVisitor, IResourceDeltaVisitor {
 
 	private static InputStream getCustomLib() throws FileNotFoundException {
 		final JSHintPreferences globalPrefs = new JSHintPreferences();
-		if (globalPrefs.getUseCustomLib()) {
+		if (globalPrefs.isUseCustomLib()) {
 			final File file = new File(globalPrefs.getCustomLibPath());
 			if (file.exists()) {
 				return new FileInputStream(file);
@@ -114,13 +113,11 @@ class JSHintBuilderVisitor implements IResourceVisitor, IResourceDeltaVisitor {
 
 	private void check(final IFile file) throws CoreException {
 		final Text code = readContent(file);
-		final MarkerHandler handler = new MarkerHandler(new MarkerAdapter(file),
-				code);
+		final MarkerAdapter adapter = new MarkerAdapter(file);
+		final MarkerHandler handler = new MarkerHandler(adapter, code);
+
 		try {
 			checker.check(code, handler);
-
-		} catch (final CoreExceptionWrapper e) {
-			throw e.getCause();
 
 		} catch (final RuntimeException e) {
 			final String path = file.getFullPath().toPortableString();

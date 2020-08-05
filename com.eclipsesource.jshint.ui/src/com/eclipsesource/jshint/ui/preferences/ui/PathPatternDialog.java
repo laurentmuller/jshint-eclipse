@@ -248,7 +248,7 @@ public class PathPatternDialog extends TitleAreaDialog {
 			builder.append(trimSlashes(folderPattern));
 			if (includeSubFoldersCheckbox.getSelection()) {
 				builder.append("//");
-			} else if (folderPattern.length() > 0) {
+			} else if (!folderPattern.isEmpty()) {
 				builder.append("/");
 			}
 		}

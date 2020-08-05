@@ -25,27 +25,6 @@ import com.eclipsesource.json.JsonObject;
 public class JSHintRunner {
 
 	/**
-	 * Handler to output problems to the standard output stream.
-	 */
-	private static final class SysoutProblemHandler implements ProblemHandler {
-
-		private final String file;
-
-		public SysoutProblemHandler(final String file) {
-			this.file = file;
-		}
-
-		@Override
-		public void handleProblem(final Problem problem) {
-			final int line = problem.getLine();
-			final String message = problem.getMessage();
-			System.out.format("Problem in file %s at line %s: %s%n", //
-					file, line, message);
-		}
-
-	}
-
-	/**
 	 * The charset parameter name.
 	 */
 	private static final String PARAM_CHARSET = "--charset";
@@ -109,6 +88,7 @@ public class JSHintRunner {
 		final JsonObject configuration = new JsonObject();
 		configuration.add("undef", true);
 		jshint.configure(configuration);
+
 	}
 
 	private void ensureCharset() {
@@ -134,21 +114,28 @@ public class JSHintRunner {
 						.format("Failed to load JSHint library: %s.", library);
 				throw new IllegalArgumentException(msg, e);
 			}
+		} else {
+			try {
+				jshint.load();
+			} catch (final IOException e) {
+				final String msg = "Failed to load the default JSHint library.";
+				throw new IllegalArgumentException(msg, e);
+			}
 		}
 	}
 
 	private void processFiles() throws IOException {
+		final DebugProblemHandler handler = new DebugProblemHandler();
 		for (final File file : files) {
 			final String code = readContent(file);
-			final ProblemHandler handler = new SysoutProblemHandler(
-					file.getAbsolutePath());
+			handler.setFile(file);
 			jshint.check(code, handler);
 		}
 	}
 
 	private void readArgs(final String[] args) {
 		String lastArg = null;
-		files = new ArrayList<File>();
+		files = new ArrayList<>();
 
 		for (final String arg : args) {
 			if (PARAM_CHARSET.equalsIgnoreCase(lastArg)) {

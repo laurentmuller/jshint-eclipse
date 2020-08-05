@@ -273,7 +273,7 @@ public class JSHint {
 			final Object object = errors.get(i, errors);
 			final ScriptableObject error = (ScriptableObject) object;
 			if (error != null) {
-				final Problem problem = createProblem(error, text);
+				final IProblem problem = createProblem(error, text);
 				handler.handleProblem(problem);
 			}
 		}
@@ -317,7 +317,7 @@ public class JSHint {
 	 * }
 	 * </pre>
 	 */
-	Problem createProblem(final ScriptableObject error, final Text text) {
+	IProblem createProblem(final ScriptableObject error, final Text text) {
 		final String reason = getPropertyAsString(error, "reason", "");
 		int line = getPropertyAsInt(error, "line", -1);
 		int character = getPropertyAsInt(error, "character", -1);
@@ -330,7 +330,7 @@ public class JSHint {
 			character = visualToCharIndex(text, line, character);
 		}
 
-		return new ProblemImpl(line, character, reason, code);
+		return new Problem(line, character, reason, code);
 	}
 
 	/**

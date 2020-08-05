@@ -37,7 +37,7 @@ public class IncludesView extends Composite {
 
 	private static List<String> getPatterns(final Table table) {
 		final TableItem[] items = table.getItems();
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>(items.length);
 		for (final TableItem item : items) {
 			result.add(item.getText());
 		}

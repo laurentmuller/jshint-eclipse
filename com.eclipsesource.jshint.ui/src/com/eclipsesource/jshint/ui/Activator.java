@@ -46,7 +46,7 @@ public class Activator extends AbstractUIPlugin {
 		return instance;
 	}
 
-	public static void handleError(final IStatus status) {
+	public static void handleStatus(final IStatus status) {
 		if (status != null) {
 			StatusManager.getManager().handle(status);
 		}
@@ -55,7 +55,7 @@ public class Activator extends AbstractUIPlugin {
 	public static void handleError(final String message,
 			final Throwable exception) {
 		final IStatus status = createError(message, exception);
-		handleError(status);
+		handleStatus(status);
 	}
 
 	@Override

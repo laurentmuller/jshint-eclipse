@@ -15,10 +15,17 @@ import java.util.List;
 
 public class PathEncoderUtils {
 
+	/*
+	 * the paths separator
+	 */
+	private static final String PATH_SEPARATOR = "#";
+
 	public static List<String> decodePaths(final String encodedPaths) {
-		final List<String> list = new ArrayList<>();
-		for (final String path : encodedPaths.split(":")) {
-			if (path.length() > 0) {
+		final String[] paths = encodedPaths.split(PATH_SEPARATOR);
+		final List<String> list = new ArrayList<>(paths.length);
+
+		for (final String path : paths) {
+			if (!path.isEmpty()) {
 				list.add(path);
 			}
 		}
@@ -26,13 +33,16 @@ public class PathEncoderUtils {
 	}
 
 	public static String encodePaths(final List<String> paths) {
-		final StringBuilder builder = new StringBuilder();
+		boolean addSeparator = false;
+		final StringBuilder builder = new StringBuilder(256);
+
 		for (final String path : paths) {
-			if (path.length() > 0) {
-				if (builder.length() > 0) {
-					builder.append(':');
+			if (path != null && !path.isEmpty()) {
+				if (addSeparator) {
+					builder.append(PATH_SEPARATOR);
 				}
 				builder.append(path);
+				addSeparator = true;
 			}
 		}
 		return builder.toString();

@@ -12,10 +12,10 @@ package com.eclipsesource.jshint.ui.builder;
 
 import org.eclipse.core.runtime.CoreException;
 
-import com.eclipsesource.jshint.Problem;
+import com.eclipsesource.jshint.IProblem;
 import com.eclipsesource.jshint.ProblemHandler;
 import com.eclipsesource.jshint.Text;
-import com.eclipsesource.jshint.ui.builder.JSHintBuilder.CoreExceptionWrapper;
+import com.eclipsesource.jshint.ui.Activator;
 import com.eclipsesource.jshint.ui.preferences.JSHintPreferences;
 
 final class MarkerHandler implements ProblemHandler {
@@ -27,11 +27,11 @@ final class MarkerHandler implements ProblemHandler {
 	MarkerHandler(final MarkerAdapter adapter, final Text code) {
 		this.adapter = adapter;
 		this.code = code;
-		enableError = new JSHintPreferences().getEnableErrorMarkers();
+		enableError = new JSHintPreferences().isEnableErrorMarkers();
 	}
 
 	@Override
-	public void handleProblem(final Problem problem) {
+	public void handleProblem(final IProblem problem) {
 		final int line = problem.getLine();
 		final int ch = problem.getCharacter();
 		if (isValidLine(line)) {
@@ -46,8 +46,7 @@ final class MarkerHandler implements ProblemHandler {
 	}
 
 	private void createMarker(final int line, final int character,
-			final String message, final boolean isError)
-			throws CoreExceptionWrapper {
+			final String message, final boolean isError) {
 		try {
 			if (enableError && isError) {
 				adapter.createError(line, character, character, message);
@@ -55,7 +54,7 @@ final class MarkerHandler implements ProblemHandler {
 				adapter.createWarning(line, character, character, message);
 			}
 		} catch (final CoreException e) {
-			throw new CoreExceptionWrapper(e);
+			Activator.handleStatus(e.getStatus());
 		}
 	}
 

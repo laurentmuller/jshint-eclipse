@@ -30,7 +30,7 @@ public class OptionParserUtils {
 	}
 
 	public static JsonObject createConfiguration(final String options,
-			final String globals) {
+			final String globals) throws IOException {
 		final JsonObject configuration = new JsonObject();
 		for (final Entry entry : parseOptionString(options)) {
 			configuration.add(entry.name, entry.value);
@@ -46,29 +46,26 @@ public class OptionParserUtils {
 	}
 
 	private static String parseOptionElement(final List<Entry> result,
-			final String element) {
-		if (element.length() > 0) {
+			final String element) throws IOException {
+		if (!element.isEmpty()) {
 			final String[] parts = element.split(":", 2);
 			final String key = parts[0].trim();
-			if (key.length() > 0) {
-				if (parts.length != 2) {
-					// TODO handle error
+			if (!key.isEmpty()) {
+				if (parts.length == 2) {
+					final JsonValue value = JsonValue.readFrom(parts[1].trim());
+					result.add(new Entry(key, value));
 				} else {
-					try {
-						final JsonValue value = JsonValue
-								.readFrom(parts[1].trim());
-						result.add(new Entry(key, value));
-					} catch (final IOException exception) {
-						// TODO handle error
-					}
+					throw new IOException(
+							"The 'parts' length must contains 2 elements.");
 				}
 			}
 		}
 		return element;
 	}
 
-	static List<Entry> parseOptionString(final String input) {
-		final List<Entry> result = new ArrayList<Entry>();
+	static List<Entry> parseOptionString(final String input)
+			throws IOException {
+		final List<Entry> result = new ArrayList<>();
 		final String[] elements = input.split(",");
 		for (String element : elements) {
 			element = parseOptionElement(result, element.trim());

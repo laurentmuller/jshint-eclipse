@@ -160,6 +160,14 @@ public class ConfigurationPreferencePage extends PreferencePage
 		return link;
 	}
 
+	private Preferences getPreferences() {
+		return PreferencesFactoryUtils.getWorkspacePreferences();
+	}
+
+	private IProject[] getProjects() {
+		return ResourcesPlugin.getWorkspace().getRoot().getProjects();
+	}
+
 	private void loadPreferences() {
 		final OptionsPreferences optionsPreferences = new OptionsPreferences(
 				getPreferences());
@@ -183,7 +191,7 @@ public class ConfigurationPreferencePage extends PreferencePage
 		final OptionsPreferences optionsPreferences = new OptionsPreferences(
 				getPreferences());
 		optionsPreferences.setConfig(editor.getText());
-		if (optionsPreferences.hasChanged()) {
+		if (optionsPreferences.isDirty()) {
 			savePreferences();
 		}
 	}
@@ -194,13 +202,5 @@ public class ConfigurationPreferencePage extends PreferencePage
 				BuilderUtils.triggerClean(project, JSHintBuilder.ID);
 			}
 		}
-	}
-
-	Preferences getPreferences() {
-		return PreferencesFactoryUtils.getWorkspacePreferences();
-	}
-
-	IProject[] getProjects() {
-		return ResourcesPlugin.getWorkspace().getRoot().getProjects();
 	}
 }

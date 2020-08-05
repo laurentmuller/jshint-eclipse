@@ -28,15 +28,14 @@ public class BuilderUtils {
 		final IProjectDescription description = project.getDescription();
 		final List<ICommand> commands = getCommands(description);
 		final ICommand command = findCommand(commands, builderId);
+
+		// not found?
 		if (command == null) {
-			return false;
+			commands.add(createBuildCommand(description, builderId));
+			return updateProject(project, description, commands);
 		}
+		return false;
 
-		// create
-		commands.add(createBuildCommand(description, builderId));
-
-		// update
-		return updateProject(project, description, commands);
 	}
 
 	public static boolean removeBuilderFromProject(final IProject project,
@@ -45,15 +44,13 @@ public class BuilderUtils {
 		final IProjectDescription description = project.getDescription();
 		final List<ICommand> commands = getCommands(description);
 		final ICommand command = findCommand(commands, builderId);
+
+		// found?
 		if (command != null) {
-			return false;
+			commands.remove(command);
+			return updateProject(project, description, commands);
 		}
-
-		// remove
-		commands.remove(command);
-
-		// update
-		return updateProject(project, description, commands);
+		return false;
 	}
 
 	public static void triggerBuild(final IProject project,
@@ -67,37 +64,6 @@ public class BuilderUtils {
 		project.build(IncrementalProjectBuilder.CLEAN_BUILD, builderName, //
 				null, null);
 	}
-
-	// private static void addBuildCommand(final IProjectDescription
-	// description,
-	// final String builderId) {
-	// final ICommand[] oldCommands = description.getBuildSpec();
-	// final ICommand[] newCommands = new ICommand[oldCommands.length + 1];
-	// System.arraycopy(oldCommands, 0, newCommands, 0, oldCommands.length);
-	// newCommands[newCommands.length - 1] = createBuildCommand(description,
-	// builderId);
-	// description.setBuildSpec(newCommands);
-	// }
-	//
-	// private static boolean containsBuildCommand(
-	// final IProjectDescription description, final String builderId) {
-	// for (final ICommand command : description.getBuildSpec()) {
-	// if (command.getBuilderName().equals(builderId)) {
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
-
-	// private static boolean containsCommand(final List<ICommand> commands,
-	// final String builderId) {
-	// for (final ICommand command : commands) {
-	// if (command.getBuilderName().equals(builderId)) {
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
 
 	private static ICommand createBuildCommand(
 			final IProjectDescription description, final String builderId) {

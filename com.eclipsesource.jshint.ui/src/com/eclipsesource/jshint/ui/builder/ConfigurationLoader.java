@@ -10,12 +10,7 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.builder;
 
-import static com.eclipsesource.jshint.ui.util.IOUtils.readUtf8File;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.osgi.service.prefs.Preferences;
 
 import com.eclipsesource.jshint.ui.Activator;
 import com.eclipsesource.jshint.ui.preferences.OptionsPreferences;
@@ -25,24 +20,6 @@ import com.eclipsesource.json.JsonObject;
 
 public class ConfigurationLoader {
 
-	private static JsonObject getWorkspaceConfig() {
-		try {
-			final String json = getWorkspaceConfigJson();
-			return JsonUtils.readFrom(json);
-
-		} catch (final Exception e) {
-			final String msg = "Failed to read jshint configuration from workspace preferences.";
-			Activator.handleError(msg, e);
-			return new JsonObject();
-		}
-	}
-
-	private static String getWorkspaceConfigJson() {
-		final Preferences workspaceNode = PreferencesFactoryUtils
-				.getWorkspacePreferences();
-		return new OptionsPreferences(workspaceNode).getConfig();
-	}
-
 	private final IProject project;
 
 	public ConfigurationLoader(final IProject project) {
@@ -50,19 +27,17 @@ public class ConfigurationLoader {
 	}
 
 	public JsonObject getConfiguration() {
-		final Preferences projectNode = PreferencesFactoryUtils
-				.getProjectPreferences(project);
-		final OptionsPreferences projectPreferences = new OptionsPreferences(
-				projectNode);
-		if (projectPreferences.getProjectSpecific()) {
-			return getProjectConfig(projectPreferences);
+		final OptionsPreferences preferences = PreferencesFactoryUtils
+				.getProjectOptionsPreferences(project);
+		if (preferences.isProjectSpecific()) {
+			return getProjectConfig(preferences);
 		}
 		return getWorkspaceConfig();
 	}
 
 	private JsonObject getProjectConfig(final OptionsPreferences projectPrefs) {
 		try {
-			final String json = getProjectConfigJson(projectPrefs);
+			final String json = projectPrefs.getConfig();
 			return JsonUtils.readFrom(json);
 
 		} catch (final Exception e) {
@@ -74,18 +49,17 @@ public class ConfigurationLoader {
 		}
 	}
 
-	private IFile getProjectConfigFile() {
-		return project.getFile(".jshintrc");
-	}
+	private JsonObject getWorkspaceConfig() {
+		try {
+			final OptionsPreferences preferences = PreferencesFactoryUtils
+					.getWorkspaceOptionsPreferences();
+			final String json = preferences.getConfig();
+			return JsonUtils.readFrom(json);
 
-	private String getProjectConfigJson(final OptionsPreferences projectPrefs)
-			throws CoreException {
-		final IFile configFile = getProjectConfigFile();
-		if (!configFile.exists()) {
-			// compatibility
-			return projectPrefs.getConfig();
+		} catch (final Exception e) {
+			final String msg = "Failed to read jshint configuration from workspace preferences.";
+			Activator.handleError(msg, e);
+			return new JsonObject();
 		}
-		return readUtf8File(configFile);
 	}
-
 }

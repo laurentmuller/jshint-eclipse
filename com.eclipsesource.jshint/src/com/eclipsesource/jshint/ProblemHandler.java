@@ -22,6 +22,6 @@ public interface ProblemHandler {
 	 * @param problem
 	 *            the problem
 	 */
-	void handleProblem(Problem problem);
+	void handleProblem(IProblem problem);
 
 }

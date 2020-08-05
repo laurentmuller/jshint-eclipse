@@ -71,7 +71,7 @@ public class JSHintPreferences {
 		}
 	}
 
-	public boolean getEnableErrorMarkers() {
+	public boolean isEnableErrorMarkers() {
 		try {
 			readLock.lock();
 			return enableErrorMarkers;
@@ -80,7 +80,7 @@ public class JSHintPreferences {
 		}
 	}
 
-	public boolean getUseCustomLib() {
+	public boolean isUseCustomLib() {
 		try {
 			readLock.lock();
 			return useCustomLib;
@@ -89,7 +89,7 @@ public class JSHintPreferences {
 		}
 	}
 
-	public boolean hasChanged() {
+	public boolean isDirty() {
 		try {
 			readLock.lock();
 			return dirty;

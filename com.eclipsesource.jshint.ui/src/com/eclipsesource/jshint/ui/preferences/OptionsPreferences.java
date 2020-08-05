@@ -10,34 +10,33 @@
  ******************************************************************************/
 package com.eclipsesource.jshint.ui.preferences;
 
-import static com.eclipsesource.jshint.ui.util.JsonUtils.prettyPrint;
-
 import java.io.IOException;
 
 import org.osgi.service.prefs.Preferences;
 
+import com.eclipsesource.jshint.ui.util.JsonUtils;
 import com.eclipsesource.json.JsonObject;
 
 public class OptionsPreferences {
 
-	private static final String KEY_PROJ_SPECIFIC = "projectSpecificOptions";
-	private static final String KEY_GLOBALS = "globals";
-	private static final String KEY_OPTIONS = "options";
-	private static final String KEY_CONFIG = "config";
+	private static final String KEY_PROJ_SPECIFIC = "projectSpecificOptions"; //$NON-NLS-1$
+	private static final String KEY_GLOBALS = "globals"; //$NON-NLS-1$
+	private static final String KEY_OPTIONS = "options"; //$NON-NLS-1$
+	private static final String KEY_CONFIG = "config"; //$NON-NLS-1$
 
 	public static final boolean DEFAULT_PROJ_SPECIFIC = false;
 
-	public static final String DEFAULT_CONFIG = "{\n  \n}";
+	public static final String DEFAULT_CONFIG = "{\n  \n}"; //$NON-NLS-1$
 
 	private final Preferences node;
-	private boolean changed;
+	private boolean dirty;
 
 	public OptionsPreferences(final Preferences node) {
 		this.node = node;
 	}
 
-	public void clearChanged() {
-		changed = false;
+	public void clearDirty() {
+		dirty = false;
 	}
 
 	public String getConfig() {
@@ -49,18 +48,18 @@ public class OptionsPreferences {
 		return node;
 	}
 
-	public boolean getProjectSpecific() {
-		return node.getBoolean(KEY_PROJ_SPECIFIC, DEFAULT_PROJ_SPECIFIC);
+	public boolean isDirty() {
+		return dirty;
 	}
 
-	public boolean hasChanged() {
-		return changed;
+	public boolean isProjectSpecific() {
+		return node.getBoolean(KEY_PROJ_SPECIFIC, DEFAULT_PROJ_SPECIFIC);
 	}
 
 	public void setConfig(final String value) {
 		if (!value.equals(node.get(KEY_CONFIG, null))) {
 			node.put(KEY_CONFIG, value);
-			changed = true;
+			dirty = true;
 		}
 	}
 
@@ -72,7 +71,7 @@ public class OptionsPreferences {
 			} else {
 				node.putBoolean(KEY_PROJ_SPECIFIC, value);
 			}
-			changed = true;
+			dirty = true;
 		}
 	}
 
@@ -82,7 +81,7 @@ public class OptionsPreferences {
 			final String globals = node.get(KEY_GLOBALS, ""); //$NON-NLS-1$
 			final JsonObject obj = OptionParserUtils
 					.createConfiguration(options, globals);
-			return prettyPrint(obj);
+			return JsonUtils.prettyPrint(obj);
 		} catch (final IOException e) {
 			return ""; //$NON-NLS-1$
 		}

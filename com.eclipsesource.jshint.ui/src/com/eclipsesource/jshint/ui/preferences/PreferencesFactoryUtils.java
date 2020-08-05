@@ -19,8 +19,19 @@ import com.eclipsesource.jshint.ui.Activator;
 
 public class PreferencesFactoryUtils {
 
+	public static OptionsPreferences getProjectOptionsPreferences(
+			final IProject project) {
+		final Preferences node = getProjectPreferences(project);
+		return new OptionsPreferences(node);
+	}
+
 	public static Preferences getProjectPreferences(final IProject project) {
 		return new ProjectScope(project).getNode(Activator.PLUGIN_ID);
+	}
+
+	public static OptionsPreferences getWorkspaceOptionsPreferences() {
+		final Preferences node = getWorkspacePreferences();
+		return new OptionsPreferences(node);
 	}
 
 	public static Preferences getWorkspacePreferences() {

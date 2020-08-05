@@ -71,7 +71,7 @@ public class ConfigurationPropertyPage extends AbstractPropertyPage {
 				triggerRebuild();
 			}
 		} catch (final CoreException e) {
-			Activator.handleError(e.getStatus());
+			Activator.handleStatus(e.getStatus());
 			return false;
 		}
 		return true;
@@ -200,11 +200,11 @@ public class ConfigurationPropertyPage extends AbstractPropertyPage {
 	private void loadPreferences() {
 		final OptionsPreferences prefs = new OptionsPreferences(
 				getPreferences());
-		chkProject.setSelection(prefs.getProjectSpecific());
+		chkProject.setSelection(prefs.isProjectSpecific());
 		originalConfiguration = readConfigFile();
 		editor.setText(originalConfiguration != null ? originalConfiguration
 				: getDefaultConfig());
-		editor.setEnabled(prefs.getProjectSpecific());
+		editor.setEnabled(prefs.isProjectSpecific());
 	}
 
 	private void prefsChanged() {
@@ -227,7 +227,7 @@ public class ConfigurationPropertyPage extends AbstractPropertyPage {
 			} catch (final CoreException e) {
 				final IStatus status = e.getStatus();
 				setErrorMessage(status.getMessage());
-				Activator.handleError(status);
+				Activator.handleStatus(status);
 			}
 		}
 		return null;
@@ -246,7 +246,7 @@ public class ConfigurationPropertyPage extends AbstractPropertyPage {
 		final OptionsPreferences prefs = new OptionsPreferences(
 				getPreferences());
 		prefs.setProjectSpecific(chkProject.getSelection());
-		final boolean changed = prefs.hasChanged();
+		final boolean changed = prefs.isDirty();
 		if (changed) {
 			savePreferences();
 		}

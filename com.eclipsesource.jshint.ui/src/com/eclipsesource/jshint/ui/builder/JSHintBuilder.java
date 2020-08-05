@@ -22,21 +22,6 @@ import com.eclipsesource.jshint.ui.Activator;
 
 public class JSHintBuilder extends IncrementalProjectBuilder {
 
-	static class CoreExceptionWrapper extends RuntimeException {
-
-		private static final long serialVersionUID = 2267576736168605043L;
-
-		public CoreExceptionWrapper(final CoreException wrapped) {
-			super(wrapped);
-		}
-
-		@Override
-		public synchronized CoreException getCause() {
-			return (CoreException) super.getCause();
-		}
-
-	}
-
 	public static final String ID = Activator.PLUGIN_ID + ".builder";
 
 	@Override

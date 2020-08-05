@@ -21,8 +21,7 @@ public class ResourceSelector {
 
 	private static List<PathPattern> createPatterns(
 			final List<String> expressions) {
-		final List<PathPattern> patterns = new ArrayList<PathPattern>(
-				expressions.size());
+		final List<PathPattern> patterns = new ArrayList<>(expressions.size());
 		for (final String expression : expressions) {
 			patterns.add(PathPattern.create(expression));
 		}
