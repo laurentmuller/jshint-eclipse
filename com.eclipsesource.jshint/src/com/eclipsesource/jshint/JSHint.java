@@ -51,7 +51,7 @@ public class JSHint {
 	/**
 	 * The JSHint library version.
 	 */
-	private static final String DEFAULT_JSHINT_VERSION = "2.12.0";
+	private static final String DEFAULT_JSHINT_VERSION = "2.13.1";
 
 	/*
 	 * the default JSON indentation
@@ -324,9 +324,6 @@ public class JSHint {
 			context.evaluateString(scope, createShimCode(), "shim", 1, null);
 			context.evaluateReader(scope, reader, "jshint-library", 1, null);
 			jshint = findJSHintFunction(scope);
-
-			// findOptions(context, scope);
-
 		} catch (final RhinoException e) {
 			throw new IOException("Could not evaluate JavaScript input.", e);
 		} finally {

@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>jshint-eclipse</name>
 	<groupId>com.eclipsesource.jshint</groupId>
 	<artifactId>com.eclipsesource.jshint.build</artifactId>
-	<version>2.12.0</version>
+	<version>2.13.1</version>
 	<packaging>pom</packaging>
 
 	<properties>
-		<!--  global properties -->
+		<!-- global properties -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
+
 		<!-- maven properties -->
 		<maven.descriptor>false</maven.descriptor>
-		<maven.deploy.skip>true</maven.deploy.skip>		
+		<maven.deploy.skip>true</maven.deploy.skip>
 		<final.name>${project.artifactId}_${unqualifiedVersion}${buildQualifier}</final.name>
-		
+
 		<!-- plugin versions -->
 		<tycho-version>1.6.0</tycho-version>
 		<wagon-version>3.3.4</wagon-version>
 
 		<!-- repositories -->
-		<eclipse.repo>http://download.eclipse.org/releases/latest</eclipse.repo>
-		<orbit.repo>https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository</orbit.repo>		
-				
+		<eclipse.repo>http://download.eclipse.org/releases/2020-09</eclipse.repo>
+		<orbit.repo>https://download.eclipse.org/tools/orbit/downloads/drops/R20190602212107/repository</orbit.repo>
+
 		<!-- FTP properties -->
-		<ftp.serverId>infomaniak</ftp.serverId>
-		<ftp.url>ftp://tj8om.ftp.infomaniak.com/web</ftp.url>
+		<ftp.serverId>infomaniak</ftp.serverId>                 	
+		<ftp.url>ftps://tj8om.ftp.infomaniak.com</ftp.url>
 		<ftp.from>${project.basedir}/com.eclipsesource.jshint.repository/target/repository</ftp.from>
-		<ftp.to>jshint-eclipse/v${project.version}</ftp.to>
-		
+		<ftp.to>web/jshint-eclipse/v${project.version}</ftp.to>
+
 		<!-- developer -->
 		<developer.name>Laurent Muller</developer.name>
-		<developer.email>bibi@bibi.nu</developer.email>		
+		<developer.email>bibi@bibi.nu</developer.email>
 	</properties>
-	
+
 	<developers>
 		<developer>
 			<id>bibi</id>
@@ -45,7 +44,7 @@
 			<url>https://www.bibi.nu</url>
 			<roles>
 				<role>architect</role>
-        		<role>developer</role>
+				<role>developer</role>
 			</roles>
 		</developer>
 	</developers>
@@ -57,7 +56,7 @@
 		<module>com.eclipsesource.jshint.feature</module>
 	</modules>
 
-	<!-- repositories to get pre-built pieces from -->
+	<!-- repositories to get built pieces from -->
 	<repositories>
 		<repository>
 			<id>eclipse-repo</id>
@@ -72,7 +71,7 @@
 	</repositories>
 
 	<build>
-			<!-- used to deploy update site -->
+		<!-- used to deploy update site -->
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
@@ -85,8 +84,8 @@
 				<version>${wagon-version}</version>
 			</extension>
 		</extensions>
-		
-		<plugins>		
+
+		<plugins>
 			<!-- skip local artifacts install -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -96,7 +95,7 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-		
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
@@ -112,7 +111,7 @@
 					<useProjectSettings>false</useProjectSettings>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
@@ -124,7 +123,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-source-plugin</artifactId>
@@ -152,22 +151,25 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
+                <!--
 				<configuration>
-					<environments>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-				</configuration>
+
+				    <environments>
+				        <environment>
+				            <os>win32</os>
+      		                <ws>win32</ws>
+      		                <arch>x86_64</arch>
+                        </environment>
+                    </environments>
+                </configuration>
+                -->
 			</plugin>
-			
+
 			<!-- deploy to update site -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -175,7 +177,7 @@
 				<version>2.0.0</version>
 				<executions>
 					<execution>
-						<id>upload</id>
+						<id>upload-files</id>
 						<phase>deploy</phase>
 						<goals>
 							<goal>upload</goal>
@@ -188,7 +190,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 </project>

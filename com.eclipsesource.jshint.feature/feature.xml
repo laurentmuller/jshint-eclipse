@@ -2,7 +2,7 @@
 <feature
       id="com.eclipsesource.jshint.feature"
       label="JSHint Eclipse Integration"
-      version="2.12.0"
+      version="2.13.1"
       provider-name="EclipseSource">
 
    <description url="http://github.eclipsesource.com/jshint-eclipse/">
